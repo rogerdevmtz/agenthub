@@ -10,7 +10,7 @@ AgentHub alquila agentes de IA a empresas. El personal de operaciones usa el pan
 
 ## Dirección visual
 
-La captura de Nexo aportada para el proyecto guía las proporciones, las superficies y los acentos del panel de AgentHub. El logotipo de Roger Martínez coloca la R sobre el nombre, con su punto en verde. Conservar el archivo de marca original y aplicar el color al mostrarlo.
+Panel oscuro de estilo SaaS, sobrio y denso en datos, con un único color de acento lima. La marca es el logotipo de Roger Martínez (`assets/roger-martinez.webp`): la R se coloca sobre el nombre, con su punto en verde. Conservar el archivo original y aplicar el color al mostrarlo.
 
 - **Tema oscuro de inicio.** Fondo casi negro `#0C0D0F`, superficies grafito `#17191C`, bordes discretos `#303338`, texto marfil `#F5F6F3` y texto secundario gris plata `#B5B8BF`. Usar el lima `#C7FF4F` en la selección, el foco y los acentos del Dashboard. El tema claro usa fondo blanco frío con bordes gris azulados, texto carbón y acentos lima.
 - **Composición de escritorio.** Barra lateral fija de 72 px con la marca encima de los seis iconos, nombres accesibles y ayudas al pasar el cursor. El selector de tema está a la derecha en la cabecera. Mantener unos 24 px de margen y 16 px entre tarjetas. El destino seleccionado se distingue con fondo lima y texto carbón.
@@ -59,9 +59,11 @@ La captura de Nexo aportada para el proyecto guía las proporciones, las superfi
 
 ## Inventario de componentes
 
-- **Sidebar y barra superior.** Seis destinos, un único destino activo identificado con `aria-current` y un selector de tema con estado accesible.
+- **Sidebar.** Navegación lateral persistente con seis destinos y un único destino activo identificado con `aria-current` y fondo lima.
+- **Toggle de modo oscuro.** Botón en la barra superior que alterna la clase `dark` en `<html>`, expone su estado con `aria-pressed`, guarda la preferencia en `localStorage` y aplica el tema a todas las vistas, menús y modales.
 - **Tarjeta de métrica.** Icono, etiqueta y valor. Permite configurar el color de acento según la métrica.
-- **Tabla y badge.** Encabezados de columna, filas con acción accesible y estados que combinan texto y color.
+- **Tabla.** Encabezados de columna y filas con un menú de acciones accesible.
+- **Badge.** Etiqueta compacta que combina texto y color: verde para activo o resuelto, ámbar para advertencias o pendientes, rojo para fallos o permisos, gris para inactivos o finalizados, y azul o violeta para los tipos de error de conexión y datos inválidos.
 - **Menú de acciones.** Botón ⋮ con nombre específico para el registro y estado expandido. Un segundo clic, un clic fuera o Escape cierran el menú. Abrir otro menú cierra el anterior. El teclado lleva el foco a la primera acción y las flechas permiten recorrerlas.
 - **Modal.** Un patrón común para detalles, configuración y confirmaciones, con encabezado, contenido y acciones diferenciados. Cierra con el botón de cierre, clic en el fondo o Escape. El foco regresa al control de origen.
 - **Movimiento.** Los menús y modales que se abren con el puntero aparecen con un fundido breve. Al usar el teclado o activar movimiento reducido, los controles responden al instante.
@@ -80,7 +82,3 @@ La captura de Nexo aportada para el proyecto guía las proporciones, las superfi
 9. Los contratos y errores muestran nombres de agentes coherentes con el conjunto de datos inicial. Las métricas de estado y los recuentos de skills coinciden con los registros de demostración.
 10. En escritorio y tablet se pueden consultar las seis vistas y usar sus controles. En móvil se conserva el acceso a todos los datos y acciones.
 11. Los estilos se aplican con utilidades de Tailwind vía CDN. Las interacciones se ejecutan con JavaScript vanilla y los datos funcionan desde el propio prototipo.
-
-## Flujo de trabajo de 4Geeks
-
-Partir de la plantilla `4GeeksAcademy/html-hello`. Colocar este archivo en la raíz del repositorio del proyecto y registrarlo en un commit separado antes del HTML de AgentHub. Usar el contenido como prompt en Google Stitch junto con la referencia visual aprobada, y adaptar la propuesta a esta especificación. La entrega consiste en el enlace al repositorio público con la especificación y el prototipo.
