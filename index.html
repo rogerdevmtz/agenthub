@@ -18,27 +18,40 @@
 <body class="min-h-screen bg-[#f2f5fb] bg-[radial-gradient(ellipse_at_28%_0%,#fdfdff_0%,transparent_49%)] font-sans text-[#182131] antialiased dark:bg-[#0c0d0f] dark:bg-[radial-gradient(ellipse_at_27%_0%,#222528_0%,transparent_38%)] dark:text-[#f5f6f3]">
   <a id="skip-link" href="#contenido" class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-xl focus:bg-lime-300 focus:px-4 focus:py-2 focus:text-black">Saltar al contenido</a>
 
+  <svg class="absolute size-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <!-- La diferencia entre azul y rojo permite teñir el acento y conservar los tonos neutros. -->
+      <filter id="brand-dark" color-interpolation-filters="sRGB">
+        <feColorMatrix type="matrix" values=".216 0 .784 0 0   -.004 0 1.004 0 0   .69 0 .31 0 0   0 0 0 1 0"/>
+      </filter>
+      <filter id="brand-light" color-interpolation-filters="sRGB">
+        <feColorMatrix type="matrix" values="-.474 0 .556 0 0   -.743 0 .833 0 0   .038 0 .06 0 0   0 0 0 1 0"/>
+      </filter>
+      <image id="brand-source" href="assets/roger-martinez.webp" width="272" height="91"/>
+      <symbol id="brand-stacked" viewBox="0 0 60 56">
+        <svg x="10" y="1" width="40" height="39" viewBox="15 15 58 57" overflow="hidden">
+          <use href="#brand-source"/>
+        </svg>
+        <svg x="2" y="46" width="56" height="8" viewBox="82 35 174 24" overflow="hidden">
+          <use href="#brand-source"/>
+        </svg>
+      </symbol>
+    </defs>
+  </svg>
+
   <aside class="fixed inset-x-0 bottom-0 z-20 flex border-t border-[#dce2ee] bg-[#f8faff] shadow-[0_6px_24px_#2637500e] dark:border-white/10 dark:bg-[#121416] dark:shadow-none sm:inset-x-auto sm:bottom-5 sm:left-3.5 sm:top-[17px] sm:w-[72px] sm:flex-col sm:rounded-[26px] sm:border">
+    <a href="#dashboard" aria-label="Roger Martínez · Inicio de AgentHub" class="absolute left-1/2 top-3 hidden -translate-x-1/2 rounded-xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-lime-600 sm:block">
+      <svg data-brand viewBox="0 0 60 56" class="block w-[60px] [filter:url(#brand-light)] dark:[filter:url(#brand-dark)]" aria-hidden="true"><use href="#brand-stacked"/></svg>
+    </a>
     <nav id="navigation" aria-label="Secciones del panel" class="grid w-full grid-cols-6 gap-1 p-1.5 sm:flex sm:flex-col sm:items-center sm:gap-2.5 sm:p-0 sm:pt-[93px]"></nav>
   </aside>
 
   <div class="pb-24 sm:ml-[94px] sm:pb-8">
     <header class="mx-auto flex min-h-[78px] max-w-[1620px] items-center justify-between gap-4 px-4 sm:min-h-[92px] sm:px-6">
-      <svg class="absolute size-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <!-- La diferencia entre azul y rojo permite teñir el acento y conservar los tonos neutros. -->
-          <filter id="brand-dark" color-interpolation-filters="sRGB">
-            <feColorMatrix type="matrix" values=".216 0 .784 0 0   -.004 0 1.004 0 0   .69 0 .31 0 0   0 0 0 1 0"/>
-          </filter>
-          <filter id="brand-light" color-interpolation-filters="sRGB">
-            <feColorMatrix type="matrix" values="-.474 0 .556 0 0   -.743 0 .833 0 0   .038 0 .06 0 0   0 0 0 1 0"/>
-          </filter>
-        </defs>
-      </svg>
-      <a href="#dashboard" aria-label="Roger Martínez · Inicio de AgentHub" class="-ml-2 shrink-0 rounded-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-lime-600">
-        <img src="assets/roger-martinez.webp" alt="Roger Martínez" width="272" height="91" class="h-auto w-[148px] [filter:url(#brand-light)] sm:w-[170px] dark:[filter:url(#brand-dark)]">
+      <a href="#dashboard" aria-label="Roger Martínez · Inicio de AgentHub" class="shrink-0 rounded-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-lime-600 sm:hidden">
+        <svg data-brand viewBox="0 0 60 56" class="block w-[54px] [filter:url(#brand-light)] dark:[filter:url(#brand-dark)]" aria-hidden="true"><use href="#brand-stacked"/></svg>
       </a>
-      <button id="theme-toggle" title="Cambiar tema" type="button" aria-pressed="true" aria-label="Modo oscuro" class="grid size-12 shrink-0 place-items-center rounded-full border border-[#dce2ee] bg-[#f8faff] text-[#20293a] shadow-sm hover:border-lime-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-lime-600 dark:border-white/10 dark:bg-[#1b1d20] dark:text-inherit dark:shadow-none dark:hover:border-lime-300 dark:focus-visible:outline-lime-300"></button>
+      <button id="theme-toggle" title="Cambiar tema" type="button" aria-pressed="true" aria-label="Modo oscuro" class="ml-auto grid size-12 shrink-0 place-items-center rounded-full border border-[#dce2ee] bg-[#f8faff] text-[#20293a] shadow-sm hover:border-lime-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-lime-600 dark:border-white/10 dark:bg-[#1b1d20] dark:text-inherit dark:shadow-none dark:hover:border-lime-300 dark:focus-visible:outline-lime-300"></button>
     </header>
 
     <main id="contenido" tabindex="-1" class="mx-auto max-w-[1620px] px-4 pt-4 outline-none sm:px-6 sm:pt-3">
