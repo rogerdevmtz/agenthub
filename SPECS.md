@@ -1,0 +1,84 @@
+# AgentHub · Especificación del panel de administración
+
+AgentHub alquila agentes de IA a empresas. El personal de operaciones usa el panel para revisar ingresos, consultar usuarios y contratos, configurar agentes y diagnosticar errores de ejecución. El prototipo usa datos ficticios incluidos en el proyecto.
+
+## Stack y alcance
+
+- Un `index.html` semántico y JavaScript vanilla. Usar `header`, `nav`, `main`, `section`, `table` y `dialog` según su función.
+- Tailwind CSS cargado vía CDN con variantes `dark:`. Usar clases utilitarias para el diseño, sin CSS propio, atributos `style`, frameworks, jQuery ni compilación.
+- Abrir el prototipo localmente en el navegador. Los registros se declaran en el código y las acciones de demostración operan en memoria, sin llamadas a API ni backend. Conservar el tema elegido al navegar y al volver a abrir el panel cuando el navegador permita almacenamiento local.
+
+## Dirección visual
+
+La captura de Nexo aportada para el proyecto es la referencia principal. Aplicar su estética al panel de operaciones con la marca AgentHub y sus propios iconos, textos y módulos.
+
+- **Tema oscuro de inicio.** Fondo casi negro `#0C0D0F`, superficies grafito `#17191C`, bordes discretos `#303338`, texto marfil `#F5F6F3` y texto secundario gris plata `#B5B8BF`. Usar el lima `#C7FF4F` en la selección, el foco y los acentos del Dashboard. El tema claro usa un fondo gris cálido, tarjetas blancas, texto carbón y verde oscuro para acentos que requieren contraste sobre blanco.
+- **Composición de escritorio.** Barra lateral fija de unos 180 px con iconos y etiquetas, cabecera horizontal con título y selector de tema, y contenido con 24 px de margen y 16 px entre paneles. El enlace seleccionado se distingue con fondo lima y texto carbón en el tema oscuro. Usar los seis destinos del producto en la barra lateral.
+- **Tipografía y superficies.** Sans serif de sistema, títulos de página de 28–32 px, valores de métricas de 26–28 px con cifras tabulares y texto de datos de 14 px. Tarjetas con radios de 16 px, borde fino y un degradado grafito tenue. Reservar los efectos de luz para las métricas del Dashboard. Usar bordes y contraste de superficie para separar tablas, menús y modales.
+- **Adaptación.** A partir de 1280 px, mostrar cuatro métricas en fila. En tablet, usar una cuadrícula de dos columnas y una barra lateral de iconos con nombres accesibles. En móvil estrecho, permitir una columna de métricas, mantener acceso a las seis vistas y contener el desplazamiento horizontal de las tablas dentro de su panel.
+- **Marcadores de estado.** Combinar texto y color. Usar verde para estados activos o resueltos, ámbar para advertencias, rojo para fallos y gris para inactivos. Mantener foco visible y contraste en ambos temas.
+
+## Vistas
+
+### Dashboard
+
+1. Mostrar tarjetas para ingresos totales del mes, pérdidas por descuentos y cupones, agentes activos y agentes fallando. Cada tarjeta lleva icono, etiqueta y valor de ejemplo.
+2. Dar a cada tarjeta un acento semántico e incluir su superficie grafito con un brillo tenue. Mantener alineados iconos, etiquetas y cifras.
+3. Debajo de las cuatro tarjetas, mostrar un panel de ancho completo para «Actividad semanal», con área de borde discontinuo y marcador de posición centrado.
+
+### Usuarios
+
+1. Mostrar una tabla con al menos cinco usuarios. Incluir nombre, correo, plan y estado. Representar el estado con un badge con texto.
+2. Añadir un menú ⋮ por fila con «Ver detalle» y «Eliminar». Pedir confirmación dentro del prototipo antes de retirar una fila de la lista de demostración.
+3. Abrir un modal de detalle con nombre, correo, plan, estado, identificador y fecha de alta del usuario seleccionado.
+
+### Agentes
+
+1. Listar al menos cuatro agentes con nombre, propietario y un badge de estado «Activo», «Inactivo» o «Fallando».
+2. Mantener las skills plegadas inicialmente. El control «Ver skills» alterna la expansión con una transición breve y cambia su indicador visual. Respetar la preferencia de movimiento reducido.
+3. Añadir un menú ⋮ con «Configurar» y «Eliminar». La configuración abre un modal identificado con el nombre del agente, con el prompt de sistema en un `textarea` editable y una acción para guardar el cambio en memoria. La eliminación pide confirmación dentro del prototipo.
+
+### Skills
+
+1. Incluir una explicación breve de que una skill es una capacidad que se puede habilitar en un agente.
+2. Mostrar al menos cuatro skills con nombre, descripción y número de agentes que las tienen habilitadas. Calcular el recuento a partir de las asignaciones de los agentes visibles.
+3. Añadir menú ⋮ con «Ver detalle» y «Eliminar». El detalle muestra la descripción y los agentes que la usan. La eliminación pide confirmación y retira la skill del catálogo y de las asignaciones actuales, conservando el registro histórico de contratos.
+
+### Contrataciones
+
+1. Mostrar al menos cuatro contratos, con ejemplos activos y pasados. La tabla incluye cliente, agente, skills contratadas, fechas de inicio y fin e importe pagado.
+2. Presentar fechas de forma uniforme y alinear los importes en euros a la derecha. Mantener visibles los nombres de las skills mediante etiquetas de texto.
+3. Añadir menú ⋮ con «Ver detalle». El modal muestra cliente, agente, fechas, importe base, cada skill con su precio y el total. El desglose suma el importe de la tabla.
+
+### Log de errores
+
+1. Mostrar al menos seis errores con fecha y hora, nombre del agente, tipo de error y descripción breve. Ordenarlos del más reciente al más antiguo.
+2. Usar badges con texto y color para distinguir los tipos o severidades. Mostrar de forma visible cuándo una entrada está resuelta.
+3. Añadir menú ⋮ con «Ver detalle» y «Marcar como resuelto». El detalle muestra la traza completa en texto monoespaciado. Resolver una entrada actualiza su estado en la lista y desactiva esa acción para el mismo error.
+
+## Inventario de componentes
+
+- **Sidebar y barra superior.** Seis destinos, un único destino activo identificado con `aria-current` y un selector de tema con estado accesible.
+- **Tarjeta de métrica.** Icono, etiqueta y valor. Permite configurar el color de acento según la métrica.
+- **Tabla y badge.** Encabezados de columna, filas con acción accesible y estados que combinan texto y color.
+- **Menú de acciones.** Botón ⋮ con nombre específico para el registro y estado expandido. Un segundo clic, un clic fuera o Escape cierran el menú. Abrir otro menú cierra el anterior.
+- **Modal.** Un patrón común para detalles, configuración y confirmaciones. Cierra con el botón de cierre, clic en el fondo o Escape. El foco regresa al control de origen.
+- **Lista de skills desplegable.** Control con `aria-expanded` y panel asociado. Se mantiene la altura natural al expandir el contenido.
+
+## Criterios de aceptación
+
+1. El historial contiene un commit dedicado a `SPECS.md` anterior a la primera implementación HTML de AgentHub.
+2. Las seis vistas son accesibles desde la barra lateral y esta indica cuál está activa.
+3. El Dashboard muestra sus cuatro métricas y el espacio para actividad semanal. Las otras vistas cumplen los mínimos de 5 usuarios, 4 agentes, 4 skills, 4 contratos y 6 errores.
+4. Los menús de cada fila o tarjeta abren con su botón, se cierran al volver a pulsarlo y se cierran al pulsar fuera.
+5. «Ver detalle» abre el registro correcto en Usuarios, Skills, Contrataciones y Log de errores. «Configurar» abre el prompt editable en Agentes.
+6. Todos los modales se cierran desde el botón de cierre y al pulsar el fondo. Los datos se pueden leer sin desbordar el modal.
+7. Las skills empiezan plegadas y alternan entre estados con una transición visible cuando el movimiento reducido está desactivado.
+8. El selector aplica el tema a todas las vistas, menús y modales. Navegar por el panel conserva el tema.
+9. Los contratos y errores muestran nombres de agentes coherentes con el conjunto de datos inicial. Las métricas de estado y los recuentos de skills coinciden con los registros de demostración.
+10. En escritorio y tablet se pueden consultar las seis vistas y usar sus controles. En móvil se conserva el acceso a todos los datos y acciones.
+11. Los estilos se aplican con utilidades de Tailwind vía CDN. Las interacciones se ejecutan con JavaScript vanilla y los datos funcionan desde el propio prototipo.
+
+## Flujo de trabajo de 4Geeks
+
+Partir de la plantilla `4GeeksAcademy/html-hello`. Colocar este archivo en la raíz del repositorio del proyecto y registrarlo en un commit separado antes del HTML de AgentHub. Usar el contenido como prompt en Google Stitch junto con la referencia visual aprobada, y adaptar la propuesta a esta especificación. La entrega consiste en el enlace al repositorio público con la especificación y el prototipo.
