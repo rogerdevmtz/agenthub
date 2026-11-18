@@ -24,13 +24,13 @@ const views = {
   errores: { title: 'Log de errores', short: 'Errores', description: 'Incidencias de ejecución y estado de resolución.' },
 };
 
-const surface = 'rounded-2xl border border-[#dbe3d4] bg-[#fffefa] dark:border-[#303338] dark:bg-[#17191c]';
-const muted = 'text-[#4c5948] dark:text-[#b5b8bf]';
+const surface = 'rounded-2xl border border-[#dce2ee] bg-[#fcfdff] dark:border-[#303338] dark:bg-[#17191c]';
+const muted = 'text-[#465065] dark:text-[#b5b8bf]';
 const focus = 'focus-visible:outline focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-lime-700 dark:focus-visible:outline-lime-300';
-const button = `inline-flex min-h-10 items-center justify-center rounded-xl border border-[#d9e2d0] px-3.5 text-sm font-medium hover:bg-[#ecf2e4] dark:border-white/15 dark:hover:bg-white/10 ${focus}`;
-const primary = `inline-flex min-h-10 items-center justify-center rounded-xl bg-[#d9f49f] px-4 text-sm font-semibold text-[#1a220b] hover:bg-[#cdec83] dark:bg-[#c7ff4f] dark:hover:bg-lime-300 ${focus}`;
-const divider = 'divide-y divide-[#e2e8da] dark:divide-white/10';
-const dashboardPanel = `${surface} bg-[linear-gradient(145deg,#ffffff_21%,#f4f7ec_100%)] shadow-[0_8px_22px_#3140180c] dark:bg-[linear-gradient(153deg,#242628_0%,#151719_49%,#131517_100%)] dark:shadow-sm`;
+const button = `inline-flex min-h-10 items-center justify-center rounded-xl border border-[#dce2ee] px-3.5 text-sm font-medium hover:bg-[#eef3f8] dark:border-white/15 dark:hover:bg-white/10 ${focus}`;
+const primary = `inline-flex min-h-10 items-center justify-center rounded-xl bg-[#c7ff4f] px-4 text-sm font-semibold text-[#1a220b] hover:bg-[#b9f642] dark:bg-[#c7ff4f] dark:hover:bg-lime-300 ${focus}`;
+const divider = 'divide-y divide-[#e3e8f2] dark:divide-white/10';
+const dashboardPanel = `${surface} bg-[linear-gradient(145deg,#ffffff_21%,#f7f9fd_100%)] shadow-[0_8px_22px_#26375013] dark:bg-[linear-gradient(153deg,#242628_0%,#151719_49%,#131517_100%)] dark:shadow-sm`;
 
 const nav = document.querySelector('#navigation');
 const view = document.querySelector('#view');
@@ -76,9 +76,9 @@ function chips(labels) {
 
 function actionMenu(record, label, actions, opensUp = false) {
   return `<div class="relative inline-flex text-left" data-menu>
-    <button id="action-${record.id}" type="button" data-menu-button aria-label="Acciones de ${label}" aria-controls="menu-${record.id}" aria-expanded="false" class="grid size-10 place-items-center rounded-xl text-xl leading-none hover:bg-[#eaf1e2] dark:hover:bg-white/10 ${focus}">⋮</button>
-    <div hidden id="menu-${record.id}" data-menu-panel class="absolute right-0 ${opensUp ? 'bottom-full mb-1' : 'top-full mt-1'} z-10 w-48 rounded-xl border border-[#dbe3d4] bg-[#fffefa] p-1 shadow-lg dark:border-white/15 dark:bg-[#222528]">
-      ${actions.map(([action, title, disabled]) => `<button type="button" data-action="${action}" data-id="${record.id}" ${disabled ? 'disabled' : ''} class="block min-h-9 w-full rounded-lg px-3 text-left text-sm enabled:hover:bg-[#eaf1e2] disabled:opacity-50 dark:enabled:hover:bg-white/10 ${focus}">${title}</button>`).join('')}
+    <button id="action-${record.id}" type="button" data-menu-button aria-label="Acciones de ${label}" aria-controls="menu-${record.id}" aria-expanded="false" class="grid size-10 place-items-center rounded-xl text-xl leading-none hover:bg-[#edf2fa] dark:hover:bg-white/10 ${focus}">⋮</button>
+    <div hidden id="menu-${record.id}" data-menu-panel class="absolute right-0 ${opensUp ? 'bottom-full mb-1' : 'top-full mt-1'} z-10 w-48 rounded-xl border border-[#dce2ee] bg-[#fcfdff] p-1 shadow-lg dark:border-white/15 dark:bg-[#222528]">
+      ${actions.map(([action, title, disabled]) => `<button type="button" data-action="${action}" data-id="${record.id}" ${disabled ? 'disabled' : ''} class="block min-h-9 w-full rounded-lg px-3 text-left text-sm enabled:hover:bg-[#edf2fa] disabled:opacity-50 dark:enabled:hover:bg-white/10 ${focus}">${title}</button>`).join('')}
     </div>
   </div>`;
 }
@@ -89,11 +89,11 @@ function table(headers, rows, emptyText) {
   }
   return `<div class="${surface} overflow-x-auto ${rows.length <= 2 ? 'min-h-[190px]' : ''}" role="region" aria-label="Listado de ${views[currentView].title}" tabindex="0">
     <table class="w-full min-w-max text-left text-sm">
-      <thead class="border-b border-[#dbe3d4] bg-[#eef3e7] dark:border-white/10 dark:bg-white/[0.025]">
+      <thead class="border-b border-[#dce2ee] bg-[#f0f4fa] dark:border-white/10 dark:bg-white/[0.025]">
         <tr>${headers.map((header, i) => `<th scope="col" class="px-4 py-4 text-xs font-semibold ${muted} ${i === headers.length - 1 ? 'text-right' : ''}">${header}</th>`).join('')}</tr>
       </thead>
       <tbody class="${divider}">
-        ${rows.map(cells => `<tr class="hover:bg-[#f2f6eb] dark:hover:bg-white/[0.025]">
+        ${rows.map(cells => `<tr class="hover:bg-[#f5f8fd] dark:hover:bg-white/[0.025]">
           <th scope="row" class="px-4 py-3 font-semibold">${cells[0]}</th>
           ${cells.slice(1).map((cell, i) => `<td class="px-4 py-2.5 ${i === cells.length - 2 ? 'w-20 text-right' : ''}">${cell}</td>`).join('')}
         </tr>`).join('')}
@@ -106,10 +106,10 @@ function dashboard() {
   const visible = visibleRecords(agents);
   const revenue = contracts.filter(item => item.start.startsWith('2026-11')).reduce((total, contract) => total + contractTotal(contract), 0);
   const metrics = [
-    { name: 'Ingresos del mes', value: euros.format(revenue), detail: 'Noviembre de 2026', key: 'money', color: 'text-lime-800 dark:text-[#c7ff4f]' },
-    { name: 'Descuentos y cupones', value: euros.format(-620), detail: 'Pérdida acumulada del mes', key: 'discount', color: 'text-amber-800 dark:text-amber-300' },
-    { name: 'Agentes activos', value: visible.filter(agent => agent.status === 'Activo').length, detail: `De ${visible.length} agentes registrados`, key: 'agentes', color: 'text-emerald-800 dark:text-emerald-300' },
-    { name: 'Agentes fallando', value: visible.filter(agent => agent.status === 'Fallando').length, detail: 'Requieren revisión', key: 'errores', color: 'text-rose-800 dark:text-rose-300' },
+    { name: 'Ingresos del mes', value: euros.format(revenue), detail: 'Noviembre de 2026', key: 'money', color: 'bg-lime-50 text-lime-800 dark:text-[#c7ff4f]' },
+    { name: 'Descuentos y cupones', value: euros.format(-620), detail: 'Pérdida acumulada del mes', key: 'discount', color: 'bg-amber-50 text-amber-800 dark:text-amber-300' },
+    { name: 'Agentes activos', value: visible.filter(agent => agent.status === 'Activo').length, detail: `De ${visible.length} agentes registrados`, key: 'agentes', color: 'bg-emerald-50 text-emerald-800 dark:text-emerald-300' },
+    { name: 'Agentes fallando', value: visible.filter(agent => agent.status === 'Fallando').length, detail: 'Requieren revisión', key: 'errores', color: 'bg-rose-50 text-rose-800 dark:text-rose-300' },
   ];
   const trends = [
     'M3 34C15 37 18 15 29 21S41 36 50 24S60 15 69 19S78 7 95 5',
@@ -119,8 +119,8 @@ function dashboard() {
   ];
   return `<div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4" aria-label="Métricas principales">
     ${metrics.map((metric, index) => `<article data-metric class="${dashboardPanel} relative isolate min-h-[126px] overflow-hidden px-4 py-3.5 sm:px-5">
-      <div data-metric-texture class="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(circle,#52762b_0.7px,transparent_1px)] bg-[length:3px_3px] opacity-[0.21] [mask-image:radial-gradient(ellipse_80%_130%_at_100%_0%,black_0%,rgba(0,0,0,0.82)_25%,rgba(0,0,0,0.25)_63%,rgba(0,0,0,0.04)_87%,transparent_100%)] dark:bg-[radial-gradient(circle,#ffffff_0.7px,transparent_1px)] dark:opacity-[0.19]" aria-hidden="true"></div>
-      <svg viewBox="0 0 98 48" class="pointer-events-none absolute bottom-4 right-3 -z-10 h-12 w-[29%] min-w-16 text-[#528118] dark:text-[#c7ff4f]" aria-hidden="true">
+      <div data-metric-texture class="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(circle,#8c9bb5_0.7px,transparent_1px)] bg-[length:3px_3px] opacity-[0.21] [mask-image:radial-gradient(ellipse_80%_130%_at_100%_0%,black_0%,rgba(0,0,0,0.82)_25%,rgba(0,0,0,0.25)_63%,rgba(0,0,0,0.04)_87%,transparent_100%)] dark:bg-[radial-gradient(circle,#ffffff_0.7px,transparent_1px)] dark:opacity-[0.19]" aria-hidden="true"></div>
+      <svg viewBox="0 0 98 48" class="pointer-events-none absolute bottom-4 right-3 -z-10 h-12 w-[29%] min-w-16 text-[#84bb12] dark:text-[#c7ff4f]" aria-hidden="true">
         <defs>
           <linearGradient id="metric-fill-${index}" x2="0" y2="1">
             <stop stop-color="currentColor" stop-opacity=".29"/>
@@ -130,7 +130,7 @@ function dashboard() {
         <path d="${trends[index]}V48H3Z" fill="url(#metric-fill-${index})"/>
         <path d="${trends[index]}" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" class="dark:drop-shadow-[0_0_4px_#a3f52d]"/>
       </svg>
-      <h2 class="flex items-center gap-2.5 text-sm font-medium"><span class="grid size-8 shrink-0 place-items-center rounded-lg bg-[#ecf2e4] ${metric.color} dark:bg-white/[0.075]">${icon(metric.key)}</span>${metric.name}</h2>
+      <h2 class="flex items-center gap-2.5 text-sm font-medium"><span class="grid size-8 shrink-0 place-items-center rounded-lg ${metric.color} dark:bg-white/[0.075]">${icon(metric.key)}</span>${metric.name}</h2>
       <p class="mt-2.5 text-[26px] font-semibold leading-tight tracking-tight tabular-nums">${metric.value}</p>
       <p class="mt-1 pr-[24%] text-xs ${muted}">${metric.detail}</p>
     </article>`).join('')}
@@ -139,29 +139,48 @@ function dashboard() {
 }
 
 function weeklyActivity() {
-  const activityPath = 'M1 177C25 177 38 175 62 163S92 133 123 131S157 139 183 114S216 82 245 96S286 121 318 96S354 70 381 79S426 96 451 71S484 49 511 53S541 69 569 48S610 21 640 33S674 49 704 28S731 24 749 17';
-  const otherPath = 'M1 186C26 187 45 187 71 177S101 155 128 157S155 172 184 152S218 132 247 142S279 155 305 137S338 122 367 129S410 141 438 120S476 101 505 107S539 119 564 99S600 82 631 92S671 105 698 83S725 80 749 68';
+  const days = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'];
+  const runs = [32, 44, 68, 96, 74, 89, 59];
+  const ticks = [120, 90, 60, 30, 0];
+  const average = runs.reduce((sum, value) => sum + value, 0) / runs.length;
+  const plotWidth = 700;
+  const plotHeight = 196;
+  const columnWidth = plotWidth / days.length;
+  const position = value => plotHeight * (1 - value / ticks[0]);
   return `<figure id="activity" class="${dashboardPanel} mt-5 min-w-0 px-4 pb-4 pt-4 sm:px-5 sm:pb-5">
-    <figcaption class="mb-4 flex flex-wrap items-center justify-between gap-2">
+    <figcaption class="flex flex-wrap items-center justify-between gap-2">
       <h2 class="text-[22px] font-semibold tracking-tight">Actividad semanal</h2>
-      <span class="rounded-full border border-[#d5dfc9] bg-[#edf3e5] px-3 py-1.5 text-[11px] ${muted} dark:border-white/15 dark:bg-transparent">Gráfico de ejemplo</span>
+      <span class="rounded-full border border-[#dce2ed] bg-[#f6f8fc] px-3 py-1.5 text-[11px] ${muted} dark:border-white/15 dark:bg-transparent">Gráfico de ejemplo</span>
     </figcaption>
-    <div class="rounded-xl border border-dashed border-[#c0cdb5] bg-[#fbfcf7] p-3 dark:border-white/15 dark:bg-black/15 sm:p-4" aria-hidden="true">
-        <svg viewBox="0 0 760 195" preserveAspectRatio="none" class="block h-[164px] w-full sm:h-[230px]">
+    <div class="mb-4 mt-2.5 flex flex-wrap items-center gap-x-5 gap-y-2 text-xs ${muted}">
+      <span class="inline-flex items-center gap-2"><span class="size-2 rounded-sm bg-[#669d0a] dark:bg-[#c7ff4f]" aria-hidden="true"></span>Ejecuciones</span>
+      <span class="inline-flex items-center gap-2"><span class="w-4 border-t border-dashed border-[#648b24] dark:border-[#a9d55e]" aria-hidden="true"></span>Promedio diario: <strong class="-ml-1 font-semibold tabular-nums">${average}</strong></span>
+    </div>
+    <ul class="sr-only" aria-label="Ejecuciones de ejemplo por día">${days.map((day, index) => `<li>${day}: ${runs[index]}</li>`).join('')}</ul>
+    <div class="grid grid-cols-[2rem_minmax(0,1fr)] gap-2 rounded-xl border border-dashed border-[#d5dce8] bg-[#f8fafd] p-3 dark:border-white/15 dark:bg-black/15 sm:gap-3 sm:p-4" aria-hidden="true">
+      <div class="flex h-[172px] flex-col justify-between text-right text-[11px] leading-none tabular-nums ${muted} sm:h-[222px]">
+        ${ticks.map(tick => `<span>${tick}</span>`).join('')}
+      </div>
+      <div class="min-w-0">
+        <svg viewBox="0 0 ${plotWidth} 198" preserveAspectRatio="none" class="block h-[172px] w-full sm:h-[222px]">
           <defs>
-            <linearGradient id="activity-fill" x1="0" y1="0" x2="0" y2="1">
-              <stop class="text-[#a5c563] dark:text-[#9de223]" stop-color="currentColor" stop-opacity=".48"/>
-              <stop offset="100%" class="text-[#8eb734] dark:text-[#a4ec23]" stop-color="currentColor" stop-opacity="0"/>
+            <linearGradient id="activity-fill" x2="0" y2="1">
+              <stop class="text-[#a4df29] dark:text-[#a4d946]" stop-color="currentColor" stop-opacity=".58"/>
+              <stop offset="100%" class="text-[#b1e64c] dark:text-[#8abc2e]" stop-color="currentColor" stop-opacity=".035"/>
             </linearGradient>
           </defs>
-          <path d="${activityPath}V195H1Z" fill="url(#activity-fill)"/>
-          <path d="${activityPath}" fill="none" stroke="currentColor" stroke-width="2" vector-effect="non-scaling-stroke" class="text-[#528118] dark:text-[#c7ff4f]"/>
-          <path d="${otherPath}" fill="none" stroke="currentColor" stroke-width="1.7" vector-effect="non-scaling-stroke" class="text-[#687b62] dark:text-slate-100"/>
-          <circle cx="749" cy="17" r="3.6" class="fill-[#528118] stroke-[#fbfcf7] dark:fill-[#c7ff4f] dark:stroke-[#263112]" vector-effect="non-scaling-stroke"/>
-          <circle cx="749" cy="68" r="3.6" class="fill-[#687b62] stroke-[#fbfcf7] dark:fill-slate-100 dark:stroke-[#263112]" vector-effect="non-scaling-stroke"/>
-          <path d="M0 194H760" class="stroke-[#b4c1a8] dark:stroke-white/25" stroke-width="1"/>
+          ${runs.map((value, index) => {
+            const left = index * columnWidth + 3;
+            const width = columnWidth - 6;
+            const top = position(value);
+            return `<rect x="${left}" y="${top}" width="${width}" height="${plotHeight - top}" fill="url(#activity-fill)"/>
+            <path d="M${left} ${top}h${width}" class="stroke-[#82b91c] dark:stroke-[#b9ed63]" stroke-width="1.5" vector-effect="non-scaling-stroke"/>`;
+          }).join('')}
+          <path d="M0 ${position(average)}H${plotWidth}" class="stroke-[#648b24] dark:stroke-[#a9d55e]" stroke-width="1.25" stroke-dasharray="5 5" vector-effect="non-scaling-stroke"/>
+          <path d="M0 ${plotHeight}H${plotWidth}" class="stroke-[#c4cddc] dark:stroke-white/25" stroke-width="1" vector-effect="non-scaling-stroke"/>
         </svg>
-        <div class="mt-2 grid grid-cols-7 text-center text-[11px] ${muted}"><span>Lun</span><span>Mar</span><span>Mié</span><span>Jue</span><span>Vie</span><span>Sáb</span><span>Dom</span></div>
+        <div class="mt-2 grid grid-cols-7 text-center text-[11px] ${muted}">${days.map(day => `<span>${day}</span>`).join('')}</div>
+      </div>
     </div>
   </figure>`;
 }
@@ -255,10 +274,10 @@ function render() {
   document.querySelector('#description').textContent = views[currentView].description;
   nav.innerHTML = Object.entries(views).map(([name, data]) => {
     const active = name === currentView;
-    const tone = active ? 'bg-[#daf3a1] text-[#233516] dark:bg-[#c7ff4f] dark:text-[#1a220b]' : `${muted} hover:bg-[#ebf1e2] dark:hover:bg-white/10`;
+    const tone = active ? 'bg-[#c7ff4f] text-[#233516] dark:bg-[#c7ff4f] dark:text-[#1a220b]' : `${muted} hover:bg-[#eaf0f8] dark:hover:bg-white/10`;
     return `<a href="#${name}" aria-label="${data.title}" ${active ? 'aria-current="page"' : ''} class="group relative flex min-h-12 min-w-0 flex-col items-center justify-center gap-1 rounded-[15px] px-1 text-center font-medium sm:w-12 sm:px-0 ${focus} ${tone}">
       ${icon(name)}<span class="text-[9px] leading-none sm:hidden">${data.short}</span>
-      <span aria-hidden="true" class="pointer-events-none absolute left-[calc(100%+10px)] top-1/2 hidden -translate-y-1/2 whitespace-nowrap rounded-lg border border-[#dce4d2] bg-[#fffefa] px-2.5 py-1.5 text-xs text-[#263120] shadow-sm dark:border-white/15 dark:bg-[#222528] dark:text-[#f5f6f3] sm:group-hover:block sm:group-focus-visible:block">${data.title}</span>
+      <span aria-hidden="true" class="pointer-events-none absolute left-[calc(100%+10px)] top-1/2 hidden -translate-y-1/2 whitespace-nowrap rounded-lg border border-[#dce2ee] bg-[#fcfdff] px-2.5 py-1.5 text-xs text-[#20293a] shadow-sm dark:border-white/15 dark:bg-[#222528] dark:text-[#f5f6f3] sm:group-hover:block sm:group-focus-visible:block">${data.title}</span>
     </a>`;
   }).join('');
   openMenu = undefined;
@@ -371,7 +390,8 @@ function handleAction(action, id) {
 function updateTheme() {
   const dark = document.documentElement.classList.contains('dark');
   themeToggle.setAttribute('aria-pressed', String(dark));
-  themeToggle.innerHTML = icon(dark ? 'moon' : 'sun');
+  themeToggle.title = dark ? 'Activar modo claro' : 'Activar modo oscuro';
+  themeToggle.innerHTML = icon(dark ? 'sun' : 'moon');
 }
 
 themeToggle.addEventListener('click', () => {

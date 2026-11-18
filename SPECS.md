@@ -12,7 +12,7 @@ AgentHub alquila agentes de IA a empresas. El personal de operaciones usa el pan
 
 La captura de Nexo aportada para el proyecto guía las proporciones, las superficies y los acentos del panel de AgentHub. La cabecera usa el logotipo de Roger Martínez, con el punto en verde. Conservar el archivo de marca original y aplicar el color al mostrarlo.
 
-- **Tema oscuro de inicio.** Fondo casi negro `#0C0D0F`, superficies grafito `#17191C`, bordes discretos `#303338`, texto marfil `#F5F6F3` y texto secundario gris plata `#B5B8BF`. Usar el lima `#C7FF4F` en la selección, el foco y los acentos del Dashboard. El tema claro usa fondo marfil con un degradado salvia, superficies claras, bordes verdes suaves, texto carbón y verdes oscuros en el gráfico y los controles.
+- **Tema oscuro de inicio.** Fondo casi negro `#0C0D0F`, superficies grafito `#17191C`, bordes discretos `#303338`, texto marfil `#F5F6F3` y texto secundario gris plata `#B5B8BF`. Usar el lima `#C7FF4F` en la selección, el foco y los acentos del Dashboard. El tema claro usa fondo blanco frío con bordes gris azulados, texto carbón y acentos lima.
 - **Composición de escritorio.** Barra lateral fija de 72 px con los seis iconos, nombres accesibles y ayudas al pasar el cursor. Cabecera con la marca a la izquierda y selector de tema a la derecha. Mantener unos 24 px de margen y 16 px entre tarjetas. El destino seleccionado se distingue con fondo lima y texto carbón.
 - **Tipografía y superficies.** Sans serif de sistema, títulos de página de 28–32 px, valores de métricas de 26–28 px con cifras tabulares y texto de datos de 14 px. Tarjetas con radios de 16 px, borde fino y un degradado grafito tenue. Reservar los efectos de luz para las métricas del Dashboard. Usar bordes y contraste de superficie para separar tablas, menús y modales.
 - **Adaptación.** A partir de 1280 px, mostrar cuatro métricas en fila. En tablet, usar una cuadrícula de dos columnas y una barra lateral de iconos con nombres accesibles. En móvil estrecho, permitir una columna de métricas, mantener acceso a las seis vistas y contener el desplazamiento horizontal de las tablas dentro de su panel.
@@ -24,7 +24,7 @@ La captura de Nexo aportada para el proyecto guía las proporciones, las superfi
 
 1. Mostrar tarjetas para ingresos totales del mes, pérdidas por descuentos y cupones, agentes activos y agentes fallando. Cada tarjeta lleva icono, etiqueta y valor de ejemplo.
 2. Dar a cada tarjeta un acento semántico, una superficie grafito con textura que se desvanece desde la esquina superior derecha y una línea decorativa con relleno sutil. Mantener alineados iconos, etiquetas y cifras.
-3. Debajo de las cuatro tarjetas, reservar un bloque de ancho completo para «Actividad semanal». Delimitar el marcador con borde discontinuo y mostrar curvas ilustrativas identificadas como gráfico de ejemplo.
+3. Debajo de las cuatro tarjetas, reservar un bloque de ancho completo para «Actividad semanal». Identificar el marcador como gráfico de ejemplo y mostrar una barra ilustrativa por día, una escala vertical y una sola guía discontinua para el promedio diario.
 
 ### Usuarios
 
