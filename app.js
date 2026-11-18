@@ -24,20 +24,28 @@ const views = {
   errores: { title: 'Log de errores', short: 'Errores', description: 'Incidencias de ejecución y estado de resolución.' },
 };
 
-const surface = 'rounded-2xl border border-[#dce2ee] bg-[#fcfdff] dark:border-[#303338] dark:bg-[#17191c]';
+const surface = 'rounded-2xl border border-[#dce2ee] bg-[#fcfdff] shadow-[0_5px_18px_#26375012] dark:border-[#303338] dark:bg-[#17191c] dark:shadow-[0_5px_18px_#00000020]';
 const muted = 'text-[#465065] dark:text-[#b5b8bf]';
 const focus = 'focus-visible:outline focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-lime-700 dark:focus-visible:outline-lime-300';
-const button = `inline-flex min-h-10 items-center justify-center rounded-xl border border-[#dce2ee] px-3.5 text-sm font-medium hover:bg-[#eef3f8] dark:border-white/15 dark:hover:bg-white/10 ${focus}`;
+const controlHover = 'hover:bg-[#edf2fa] dark:hover:bg-white/10';
+const button = `inline-flex min-h-10 items-center justify-center rounded-xl border border-[#dce2ee] px-3.5 text-sm font-medium dark:border-white/15 ${controlHover} ${focus}`;
 const primary = `inline-flex min-h-10 items-center justify-center rounded-xl bg-[#c7ff4f] px-4 text-sm font-semibold text-[#1a220b] hover:bg-[#b9f642] dark:bg-[#c7ff4f] dark:hover:bg-lime-300 ${focus}`;
+const border = 'border-[#e3e8f2] dark:border-white/10';
 const divider = 'divide-y divide-[#e3e8f2] dark:divide-white/10';
-const dashboardPanel = `${surface} bg-[linear-gradient(145deg,#ffffff_21%,#f7f9fd_100%)] shadow-[0_8px_22px_#26375013] dark:bg-[linear-gradient(153deg,#242628_0%,#151719_49%,#131517_100%)] dark:shadow-sm`;
+const panelInset = 'px-4 sm:px-5';
+const tileIcon = 'grid size-10 shrink-0 place-items-center rounded-xl bg-lime-50 text-lime-900 dark:bg-[#c7ff4f]/10 dark:text-[#c7ff4f]';
+const dashboardPanel = `${surface} bg-[linear-gradient(145deg,#ffffff_21%,#f7f9fd_100%)] dark:bg-[linear-gradient(153deg,#242628_0%,#151719_49%,#131517_100%)]`;
+const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)');
+const enterEasing = 'cubic-bezier(0.23, 1, 0.32, 1)';
 
 const nav = document.querySelector('#navigation');
 const view = document.querySelector('#view');
 const dialog = document.querySelector('#record-dialog');
 const dialogPanel = document.querySelector('#dialog-panel');
 const themeToggle = document.querySelector('#theme-toggle');
+const themeTooltip = document.querySelector('#theme-tooltip');
 const announcement = document.querySelector('#announcement');
+const heading = document.querySelector('#heading');
 const expandedAgents = new Set();
 let currentView;
 let openMenu;
@@ -67,17 +75,17 @@ function badge(label) {
     'Datos inválidos': 'bg-violet-50 text-violet-900 dark:bg-violet-400/10 dark:text-violet-300',
   };
   const color = colors[label] ?? 'bg-slate-100 text-slate-700 dark:bg-white/10 dark:text-slate-300';
-  return `<span class="inline-flex rounded-full px-2.5 py-1 text-xs font-medium ${color}">${label}</span>`;
+  return `<span class="inline-flex items-center gap-1.5 whitespace-nowrap rounded-full px-2.5 py-1 text-xs font-medium ${color}"><span class="size-1.5 rounded-full bg-current opacity-75" aria-hidden="true"></span>${label}</span>`;
 }
 
 function chips(labels) {
-  return labels.map(label => `<span class="inline-block rounded-lg border border-black/10 px-2 py-1 text-xs dark:border-white/10">${label}</span>`).join('');
+  return labels.map(label => `<span class="inline-block rounded-lg border ${border} bg-[#f4f7fc] px-2.5 py-1.5 text-xs ${muted} dark:bg-white/5">${label}</span>`).join('');
 }
 
 function actionMenu(record, label, actions, opensUp = false) {
   return `<div class="relative inline-flex text-left" data-menu>
-    <button id="action-${record.id}" type="button" data-menu-button aria-label="Acciones de ${label}" aria-controls="menu-${record.id}" aria-expanded="false" class="grid size-10 place-items-center rounded-xl text-xl leading-none hover:bg-[#edf2fa] dark:hover:bg-white/10 ${focus}">⋮</button>
-    <div hidden id="menu-${record.id}" data-menu-panel class="absolute right-0 ${opensUp ? 'bottom-full mb-1' : 'top-full mt-1'} z-10 w-48 rounded-xl border border-[#dce2ee] bg-[#fcfdff] p-1 shadow-lg dark:border-white/15 dark:bg-[#222528]">
+    <button id="action-${record.id}" type="button" data-menu-button aria-label="Acciones de ${label}" aria-controls="menu-${record.id}" aria-expanded="false" class="grid size-10 place-items-center rounded-xl text-xl leading-none ${controlHover} aria-expanded:bg-[#edf2fa] dark:aria-expanded:bg-white/10 ${focus}">⋮</button>
+    <div hidden id="menu-${record.id}" data-menu-panel class="absolute right-0 ${opensUp ? 'bottom-full mb-1 origin-bottom-right' : 'top-full mt-1 origin-top-right'} z-10 w-48 rounded-xl border border-[#dce2ee] bg-[#fcfdff] p-1 shadow-lg dark:border-white/15 dark:bg-[#222528]">
       ${actions.map(([action, title, disabled]) => `<button type="button" data-action="${action}" data-id="${record.id}" ${disabled ? 'disabled' : ''} class="block min-h-9 w-full rounded-lg px-3 text-left text-sm enabled:hover:bg-[#edf2fa] disabled:opacity-50 dark:enabled:hover:bg-white/10 ${focus}">${title}</button>`).join('')}
     </div>
   </div>`;
@@ -87,15 +95,16 @@ function table(headers, rows, emptyText) {
   if (!rows.length) {
     return `<p class="${surface} ${muted} p-5 text-sm">${emptyText}</p>`;
   }
-  return `<div class="${surface} overflow-x-auto ${rows.length <= 2 ? 'min-h-[190px]' : ''}" role="region" aria-label="Listado de ${views[currentView].title}" tabindex="0">
+  const amountColumn = headers.indexOf('Importe');
+  return `<div class="${surface} ${focus} overflow-x-auto ${rows.length <= 2 ? 'min-h-[190px]' : ''}" role="region" aria-label="Listado de ${views[currentView].title}" tabindex="0">
     <table class="w-full min-w-max text-left text-sm">
       <thead class="border-b border-[#dce2ee] bg-[#f0f4fa] dark:border-white/10 dark:bg-white/[0.025]">
-        <tr>${headers.map((header, i) => `<th scope="col" class="px-4 py-4 text-xs font-semibold ${muted} ${i === headers.length - 1 ? 'text-right' : ''}">${header}</th>`).join('')}</tr>
+        <tr>${headers.map((header, i) => `<th scope="col" class="${panelInset} whitespace-nowrap py-3.5 text-xs font-semibold ${muted} ${i === amountColumn ? 'text-right' : ''} ${i === headers.length - 1 ? 'text-center' : ''}">${header}</th>`).join('')}</tr>
       </thead>
       <tbody class="${divider}">
         ${rows.map(cells => `<tr class="hover:bg-[#f5f8fd] dark:hover:bg-white/[0.025]">
-          <th scope="row" class="px-4 py-3 font-semibold">${cells[0]}</th>
-          ${cells.slice(1).map((cell, i) => `<td class="px-4 py-2.5 ${i === cells.length - 2 ? 'w-20 text-right' : ''}">${cell}</td>`).join('')}
+          <th scope="row" class="${panelInset} py-3 align-middle font-semibold">${cells[0]}</th>
+          ${cells.slice(1).map((cell, i) => `<td class="${panelInset} py-3 align-middle ${i === cells.length - 2 ? 'w-20 text-center' : ''}">${cell}</td>`).join('')}
         </tr>`).join('')}
       </tbody>
     </table>
@@ -199,22 +208,22 @@ function agentList() {
   return `<ul class="grid gap-3">${records.map(agent => {
     const expanded = expandedAgents.has(agent.id);
     const labels = visibleRecords(skills).filter(skill => agent.skills.includes(skill.id)).map(skill => skill.name);
-    return `<li class="${surface} px-4 py-3 sm:px-5">
-      <div class="flex flex-wrap items-center justify-between gap-3">
+    return `<li class="${surface} ${panelInset} py-4">
+      <div class="flex flex-col justify-between gap-3 sm:flex-row sm:items-center">
         <div class="flex min-w-0 flex-1 items-center gap-3">
-          <span class="grid size-10 shrink-0 place-items-center rounded-xl bg-lime-100 text-lime-900 dark:bg-[#c7ff4f]/10 dark:text-[#c7ff4f]">${icon('agentes')}</span>
-          <div><h2 class="font-semibold">${agent.name}</h2><p class="text-sm ${muted}">${nameOf(users, agent.owner)}</p></div>
+          <span class="${tileIcon}">${icon('agentes')}</span>
+          <div class="min-w-0"><h2 class="font-semibold leading-tight">${agent.name}</h2><p class="mt-0.5 text-sm ${muted}">${nameOf(users, agent.owner)}</p></div>
         </div>
-        <div class="flex flex-wrap items-center gap-x-2 gap-y-1 sm:gap-x-3">
-          ${badge(agent.status)}
-          <button id="skills-toggle-${agent.id}" data-expand="${agent.id}" type="button" aria-label="Skills de ${agent.name}" aria-controls="skills-${agent.id}" aria-expanded="${expanded}" class="${button} gap-1.5">
-            <span data-expand-label>${expanded ? 'Ocultar skills' : 'Ver skills'}</span>${icon('chevron', `size-4 transition-transform motion-reduce:transition-none ${expanded ? 'rotate-180' : ''}`)}
+        <div class="flex flex-wrap items-center gap-x-2 gap-y-2 sm:gap-x-3">
+          <span class="mr-auto sm:mr-1">${badge(agent.status)}</span>
+          <button id="skills-toggle-${agent.id}" data-expand="${agent.id}" type="button" aria-label="Skills de ${agent.name}" aria-controls="skills-${agent.id}" aria-expanded="${expanded}" class="${button} group min-w-[134px] !justify-between gap-1.5">
+            <span data-expand-label>${expanded ? 'Ocultar skills' : 'Ver skills'}</span>${icon('chevron', `size-4 transition-transform duration-200 ease-[cubic-bezier(0.23,1,0.32,1)] motion-reduce:transition-none group-data-[instant]:transition-none ${expanded ? 'rotate-180' : ''}`)}
           </button>
           ${actionMenu(agent, agent.name, [['configure', 'Configurar'], ['delete', 'Eliminar']])}
         </div>
       </div>
-      <div id="skills-${agent.id}" aria-hidden="${!expanded}" class="grid transition-all duration-200 motion-reduce:transition-none ${expanded ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}">
-        <div class="overflow-hidden"><div class="flex flex-wrap gap-2 pt-3">${labels.length ? chips(labels) : `<p class="text-sm ${muted}">Sin skills habilitadas.</p>`}</div></div>
+      <div id="skills-${agent.id}" aria-hidden="${!expanded}" class="grid transition-[grid-template-rows,opacity] duration-200 ease-[cubic-bezier(0.23,1,0.32,1)] motion-reduce:transition-none data-[instant]:transition-none ${expanded ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}">
+        <div class="overflow-hidden"><div class="mt-4 flex flex-wrap gap-2 border-t ${border} pt-3">${labels.length ? chips(labels) : `<p class="text-sm ${muted}">Sin skills habilitadas.</p>`}</div></div>
       </div>
     </li>`;
   }).join('')}</ul>`;
@@ -225,16 +234,16 @@ function skillList() {
   if (!records.length) return `<p class="${surface} ${muted} p-5 text-sm">No hay skills en el catálogo.</p>`;
   return `<ul class="grid gap-4 lg:grid-cols-2">${records.map(skill => {
     const count = agentsUsing(skill).length;
-    return `<li class="${surface} p-5">
+    return `<li class="${surface} ${panelInset} flex flex-col py-4 sm:py-5">
       <div class="flex items-start justify-between gap-3">
         <div class="flex items-center gap-3">
-          <span class="grid size-10 shrink-0 place-items-center rounded-xl bg-lime-100 text-lime-900 dark:bg-[#c7ff4f]/10 dark:text-[#c7ff4f]">${icon('skills')}</span>
-          <h2 class="font-semibold">${skill.name}</h2>
+          <span class="${tileIcon}">${icon('skills')}</span>
+          <h2 class="font-semibold leading-tight">${skill.name}</h2>
         </div>
         ${actionMenu(skill, skill.name, [['detail', 'Ver detalle'], ['delete', 'Eliminar']])}
       </div>
-      <p class="my-3 text-sm ${muted}">${skill.description}</p>
-      <p class="text-xs font-medium text-lime-900 dark:text-[#c7ff4f]">${count} ${count === 1 ? 'agente usa esta skill' : 'agentes usan esta skill'}</p>
+      <p class="mb-4 mt-3 max-w-prose text-sm leading-relaxed ${muted}">${skill.description}</p>
+      <p class="mt-auto border-t ${border} pt-3 text-xs font-medium text-lime-900 dark:text-[#c7ff4f]"><span class="font-semibold tabular-nums">${count}</span> ${count === 1 ? 'agente usa esta skill' : 'agentes usan esta skill'}</p>
     </li>`;
   }).join('')}</ul>`;
 }
@@ -243,9 +252,10 @@ function contractList() {
   return table(['Cliente', 'Agente', 'Skills contratadas', 'Inicio', 'Fin', 'Importe', 'Estado', 'Acciones'], contracts.map((contract, index) => [
     nameOf(users, contract.user),
     nameOf(agents, contract.agent),
-    `<div class="flex max-w-60 flex-wrap gap-1.5">${chips(contract.skills.map(skill => nameOf(skills, skill.id)))}</div>`,
-    formatDate(contract.start), formatDate(contract.end),
-    `<span class="block text-right font-medium tabular-nums">${euros.format(contractTotal(contract))}</span>`,
+    `<div class="flex max-w-60 flex-wrap gap-1.5 xl:max-w-72">${chips(contract.skills.map(skill => nameOf(skills, skill.id)))}</div>`,
+    `<time datetime="${contract.start}" class="whitespace-nowrap tabular-nums">${formatDate(contract.start)}</time>`,
+    `<time datetime="${contract.end}" class="whitespace-nowrap tabular-nums">${formatDate(contract.end)}</time>`,
+    `<span class="block whitespace-nowrap text-right font-medium tabular-nums">${euros.format(contractTotal(contract))}</span>`,
     badge(contract.status), actionMenu(contract, `contrato ${contract.id}`, [['detail', 'Ver detalle']], index > 1),
   ]), 'No hay contratos.');
 }
@@ -270,48 +280,64 @@ function render() {
   const key = location.hash.slice(1);
   currentView = Object.hasOwn(views, key) ? key : 'dashboard';
   document.title = `AgentHub | ${views[currentView].title}`;
-  document.querySelector('#heading').textContent = views[currentView].title;
+  heading.textContent = views[currentView].title;
   document.querySelector('#description').textContent = views[currentView].description;
   nav.innerHTML = Object.entries(views).map(([name, data]) => {
     const active = name === currentView;
     const tone = active ? 'bg-[#c7ff4f] text-[#233516] dark:bg-[#c7ff4f] dark:text-[#1a220b]' : `${muted} hover:bg-[#eaf0f8] dark:hover:bg-white/10`;
-    return `<a href="#${name}" aria-label="${data.title}" ${active ? 'aria-current="page"' : ''} class="group relative flex min-h-12 min-w-0 flex-col items-center justify-center gap-1 rounded-[15px] px-1 text-center font-medium sm:w-12 sm:px-0 ${focus} ${tone}">
+    return `<a href="#${name}" aria-label="${data.title}" ${active ? 'aria-current="page"' : ''} class="group relative flex min-h-12 min-w-0 flex-col items-center justify-center gap-1 rounded-[15px] px-1 text-center font-medium sm:w-12 sm:px-0 sm:[@media(max-height:500px)]:min-h-9 ${focus} ${tone}">
       ${icon(name)}<span class="text-[9px] leading-none sm:hidden">${data.short}</span>
-      <span aria-hidden="true" class="pointer-events-none absolute left-[calc(100%+10px)] top-1/2 hidden -translate-y-1/2 whitespace-nowrap rounded-lg border border-[#dce2ee] bg-[#fcfdff] px-2.5 py-1.5 text-xs text-[#20293a] shadow-sm dark:border-white/15 dark:bg-[#222528] dark:text-[#f5f6f3] sm:group-hover:block sm:group-focus-visible:block">${data.title}</span>
+      <span aria-hidden="true" class="pointer-events-none absolute left-[calc(100%+10px)] top-1/2 hidden -translate-y-1/2 whitespace-nowrap rounded-lg border border-[#dce2ee] bg-[#fcfdff] px-2.5 py-1.5 text-xs text-[#20293a] shadow-sm dark:border-white/15 dark:bg-[#222528] dark:text-[#f5f6f3] sm:[@media(hover:hover)]:group-hover:block sm:group-focus-visible:block">${data.title}</span>
     </a>`;
   }).join('');
   openMenu = undefined;
   view.innerHTML = renderers[currentView]();
 }
 
+function animateEntrance(element, fromPointer, scale, duration) {
+  element.getAnimations().forEach(animation => animation.cancel());
+  if (!fromPointer || reduceMotion.matches) return;
+  element.animate([
+    { opacity: 0, transform: `scale(${scale})` },
+    { opacity: 1, transform: 'none' },
+  ], { duration, easing: enterEasing });
+}
+
 function closeMenu(restoreFocus = false) {
   if (!openMenu) return;
   const trigger = openMenu.querySelector('[data-menu-button]');
-  trigger.setAttribute('aria-expanded', 'false');
-  openMenu.querySelector('[data-menu-panel]').hidden = true;
+  const panel = openMenu.querySelector('[data-menu-panel]');
   openMenu = undefined;
+  trigger.setAttribute('aria-expanded', 'false');
+  panel.hidden = true;
+  panel.getAnimations().forEach(animation => animation.cancel());
   if (restoreFocus) trigger.focus();
 }
 
-function toggleMenu(trigger) {
+function toggleMenu(trigger, fromPointer) {
   const menu = trigger.closest('[data-menu]');
   const wasOpen = menu === openMenu;
   closeMenu();
   if (wasOpen) return;
   openMenu = menu;
+  const panel = menu.querySelector('[data-menu-panel]');
   trigger.setAttribute('aria-expanded', 'true');
-  menu.querySelector('[data-menu-panel]').hidden = false;
+  panel.hidden = false;
+  animateEntrance(panel, fromPointer, 0.95, 150);
+  if (!fromPointer) panel.querySelector('button:not(:disabled)')?.focus();
 }
 
-function toggleSkills(trigger) {
+function toggleSkills(trigger, fromPointer) {
   const id = trigger.dataset.expand;
   const willOpen = !expandedAgents.has(id);
   if (willOpen) expandedAgents.add(id);
   else expandedAgents.delete(id);
+  trigger.toggleAttribute('data-instant', !fromPointer);
   trigger.setAttribute('aria-expanded', String(willOpen));
   trigger.querySelector('[data-expand-label]').textContent = willOpen ? 'Ocultar skills' : 'Ver skills';
   trigger.querySelector('svg').classList.toggle('rotate-180', willOpen);
   const panel = document.getElementById(`skills-${id}`);
+  panel.toggleAttribute('data-instant', !fromPointer);
   panel.setAttribute('aria-hidden', String(!willOpen));
   panel.classList.toggle('grid-rows-[1fr]', willOpen);
   panel.classList.toggle('grid-rows-[0fr]', !willOpen);
@@ -323,18 +349,22 @@ function detailRows(rows) {
   return `<dl class="${divider}">${rows.map(([label, value]) => `<div class="grid grid-cols-[minmax(6rem,1fr)_2fr] gap-3 py-2.5 text-sm"><dt class="${muted}">${label}</dt><dd class="break-words font-medium">${value}</dd></div>`).join('')}</dl>`;
 }
 
-function showDialog(title, body, id, footer = '') {
+function showDialog(title, body, id, fromPointer, footer = '') {
   openerId = `action-${id}`;
-  dialogPanel.innerHTML = `<div class="mb-4 flex items-start justify-between gap-4">
-    <h2 id="dialog-title" class="pt-1 text-xl font-semibold tracking-tight">${title}</h2>
-    <button data-dialog-close type="button" aria-label="Cerrar" autofocus class="grid size-9 shrink-0 place-items-center rounded-lg hover:bg-black/5 dark:hover:bg-white/10 ${focus}">${icon('close')}</button>
-  </div>
-  ${body}
-  ${footer ? `<footer class="mt-5 flex flex-wrap justify-end gap-2">${footer}</footer>` : ''}`;
+  dialogPanel.innerHTML = `<header class="flex items-center justify-between gap-4 border-b ${border} px-4 py-4 sm:px-6">
+    <div class="flex min-w-0 items-center gap-3">
+      <span class="${tileIcon}">${icon(currentView)}</span>
+      <h2 id="dialog-title" class="min-w-0 break-words text-xl font-semibold tracking-tight">${title}</h2>
+    </div>
+    <button data-dialog-close type="button" aria-label="Cerrar" autofocus class="grid size-10 shrink-0 place-items-center rounded-xl ${controlHover} ${focus}">${icon('close')}</button>
+  </header>
+  <div class="px-4 py-4 sm:px-6">${body}</div>
+  ${footer ? `<footer class="flex flex-wrap justify-end gap-2 border-t ${border} px-4 py-4 sm:px-6">${footer}</footer>` : ''}`;
   dialog.showModal();
+  animateEntrance(dialog, fromPointer, 0.96, 200);
 }
 
-function showDetail(record) {
+function showDetail(record, fromPointer) {
   const details = {
     usuarios: () => detailRows([['ID', record.id], ['Nombre', record.name], ['Correo', record.email], ['Plan', record.plan], ['Estado', badge(record.status)], ['Alta', formatDate(record.since)]]),
     skills: () => detailRows([['ID', record.id], ['Descripción', record.description], ['Agentes', agentsUsing(record).map(agent => agent.name).join(', ') || 'Sin asignaciones']]),
@@ -346,7 +376,7 @@ function showDetail(record) {
     errores: () => detailRows([['Agente', nameOf(agents, record.agent)], ['Fecha y hora', dateTime.format(new Date(record.timestamp))], ['Tipo', badge(record.type)], ['Descripción', record.description], ['Estado', badge(record.resolved ? 'Resuelto' : 'Pendiente')]]) +
       '<h3 class="mb-2 mt-3 text-sm font-semibold">Traza</h3><pre id="error-trace" class="whitespace-pre-wrap break-words rounded-xl bg-black/5 p-3 text-xs dark:bg-black/30"></pre>',
   };
-  showDialog(record.name ?? record.id, details[currentView](), record.id);
+  showDialog(record.name ?? record.id, details[currentView](), record.id, fromPointer);
   if (currentView === 'errores') document.querySelector('#error-trace').textContent = record.trace;
 }
 
@@ -356,13 +386,13 @@ function updateRecords(message, record) {
   (document.getElementById(`action-${record.id}`) ?? document.querySelector('#contenido')).focus();
 }
 
-function handleAction(action, id) {
+function handleAction(action, id, fromPointer) {
   const record = recordsByView[currentView].find(item => item.id === id);
   closeMenu(true);
   if (action === 'detail') {
-    showDetail(record);
+    showDetail(record, fromPointer);
   } else if (action === 'configure') {
-    showDialog(`Configurar ${record.name}`, `<form id="agent-config"><label for="system-prompt" class="mb-2 block text-sm font-medium">Prompt de sistema</label><textarea id="system-prompt" required rows="5" class="w-full rounded-xl border border-black/15 bg-black/[0.025] p-3 text-sm dark:border-white/15 dark:bg-black/20 ${focus}"></textarea></form>`, id,
+    showDialog(`Configurar ${record.name}`, `<form id="agent-config"><label for="system-prompt" class="mb-2 block text-sm font-medium">Prompt de sistema</label><textarea id="system-prompt" required rows="5" class="w-full rounded-xl border border-[#dce2ee] bg-[#f4f7fc] p-3 text-sm leading-relaxed dark:border-white/15 dark:bg-black/20 ${focus}"></textarea></form>`, id, fromPointer,
       `<button data-dialog-close type="button" class="${button}">Cancelar</button><button type="submit" form="agent-config" class="${primary}">Guardar</button>`);
     const form = document.querySelector('#agent-config');
     const prompt = form.querySelector('textarea');
@@ -374,7 +404,7 @@ function handleAction(action, id) {
       announcement.textContent = `Configuración de ${record.name} guardada.`;
     });
   } else if (action === 'delete') {
-    showDialog(`Eliminar ${record.name}`, `<p class="text-sm ${muted}">¿Quieres retirar este registro del listado de demostración?</p>`, id,
+    showDialog(`Eliminar ${record.name}`, `<p class="text-sm leading-relaxed ${muted}">¿Quieres retirar este registro del listado de demostración?</p>`, id, fromPointer,
       `<button data-dialog-close type="button" class="${button}">Cancelar</button><button data-confirm-delete type="button" class="${primary}">Eliminar</button>`);
     dialogPanel.querySelector('[data-confirm-delete]').addEventListener('click', () => {
       record.removed = true;
@@ -390,7 +420,7 @@ function handleAction(action, id) {
 function updateTheme() {
   const dark = document.documentElement.classList.contains('dark');
   themeToggle.setAttribute('aria-pressed', String(dark));
-  themeToggle.title = dark ? 'Activar modo claro' : 'Activar modo oscuro';
+  themeTooltip.textContent = dark ? 'Activar modo claro' : 'Activar modo oscuro';
   themeToggle.innerHTML = icon(dark ? 'sun' : 'moon');
 }
 
@@ -405,13 +435,34 @@ document.addEventListener('click', event => {
   const menuButton = event.target.closest('[data-menu-button]');
   const skillButton = event.target.closest('[data-expand]');
   const actionButton = event.target.closest('[data-action]');
-  if (menuButton) toggleMenu(menuButton);
-  if (skillButton) toggleSkills(skillButton);
-  if (actionButton) handleAction(actionButton.dataset.action, actionButton.dataset.id);
+  const fromPointer = event.detail > 0;
+  if (menuButton) toggleMenu(menuButton, fromPointer);
+  if (skillButton) toggleSkills(skillButton, fromPointer);
+  if (actionButton) handleAction(actionButton.dataset.action, actionButton.dataset.id, fromPointer);
 });
 
 document.addEventListener('keydown', event => {
-  if (event.key === 'Escape' && openMenu) closeMenu(true);
+  if (!openMenu) return;
+  if (event.key === 'Escape') {
+    event.preventDefault();
+    closeMenu(true);
+    return;
+  }
+  if (!openMenu.contains(event.target) || !['ArrowDown', 'ArrowUp', 'Home', 'End'].includes(event.key)) return;
+  const actions = [...openMenu.querySelectorAll('[data-action]:not(:disabled)')];
+  const current = actions.indexOf(document.activeElement);
+  const next = {
+    ArrowDown: (current + 1) % actions.length,
+    ArrowUp: current <= 0 ? actions.length - 1 : current - 1,
+    Home: 0,
+    End: actions.length - 1,
+  };
+  event.preventDefault();
+  actions[next[event.key]]?.focus();
+});
+
+view.addEventListener('focusout', event => {
+  if (openMenu?.contains(event.target) && !openMenu.contains(event.relatedTarget)) closeMenu();
 });
 
 dialog.addEventListener('click', event => {
@@ -419,12 +470,18 @@ dialog.addEventListener('click', event => {
 });
 
 dialog.addEventListener('close', () => {
+  if (dialog.open) return;
+  dialog.getAnimations().forEach(animation => animation.cancel());
   document.getElementById(openerId)?.focus();
 });
 
 nav.addEventListener('click', event => {
   const link = event.target.closest('a');
-  if (link) document.querySelector('#contenido').focus();
+  if (link?.matches('[aria-current="page"]')) {
+    event.preventDefault();
+    window.scrollTo(0, 0);
+    heading.focus({ preventScroll: true });
+  }
 });
 
 document.querySelector('#skip-link').addEventListener('click', event => {
@@ -435,6 +492,8 @@ document.querySelector('#skip-link').addEventListener('click', event => {
 window.addEventListener('hashchange', () => {
   if (dialog.open) dialog.close();
   render();
+  window.scrollTo(0, 0);
+  heading.focus({ preventScroll: true });
 });
 
 updateTheme();

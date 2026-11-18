@@ -14,7 +14,7 @@ La captura de Nexo aportada para el proyecto guía las proporciones, las superfi
 
 - **Tema oscuro de inicio.** Fondo casi negro `#0C0D0F`, superficies grafito `#17191C`, bordes discretos `#303338`, texto marfil `#F5F6F3` y texto secundario gris plata `#B5B8BF`. Usar el lima `#C7FF4F` en la selección, el foco y los acentos del Dashboard. El tema claro usa fondo blanco frío con bordes gris azulados, texto carbón y acentos lima.
 - **Composición de escritorio.** Barra lateral fija de 72 px con la marca encima de los seis iconos, nombres accesibles y ayudas al pasar el cursor. El selector de tema está a la derecha en la cabecera. Mantener unos 24 px de margen y 16 px entre tarjetas. El destino seleccionado se distingue con fondo lima y texto carbón.
-- **Tipografía y superficies.** Sans serif de sistema, títulos de página de 28–32 px, valores de métricas de 26–28 px con cifras tabulares y texto de datos de 14 px. Tarjetas con radios de 16 px, borde fino y un degradado grafito tenue. Reservar los efectos de luz para las métricas del Dashboard. Usar bordes y contraste de superficie para separar tablas, menús y modales.
+- **Tipografía y superficies.** Sans serif de sistema, valores de métricas de 26–28 px con cifras tabulares y texto de datos de 14 px. Alinear los encabezados y paneles al mismo margen. Usar bordes finos, radios de 16 px y separación consistente en tarjetas, tablas y modales. Reservar los efectos de luz para las métricas del Dashboard.
 - **Adaptación.** A partir de 1280 px, mostrar cuatro métricas en fila. En tablet, usar una cuadrícula de dos columnas y una barra lateral de iconos con nombres accesibles. En móvil estrecho, llevar la marca a la cabecera, permitir una columna de métricas, mantener acceso a las seis vistas y contener el desplazamiento horizontal de las tablas dentro de su panel.
 - **Marcadores de estado.** Combinar texto y color. Usar verde para estados activos o resueltos, ámbar para advertencias, rojo para fallos y gris para inactivos. Mantener foco visible y contraste en ambos temas.
 
@@ -61,8 +61,9 @@ La captura de Nexo aportada para el proyecto guía las proporciones, las superfi
 - **Sidebar y barra superior.** Seis destinos, un único destino activo identificado con `aria-current` y un selector de tema con estado accesible.
 - **Tarjeta de métrica.** Icono, etiqueta y valor. Permite configurar el color de acento según la métrica.
 - **Tabla y badge.** Encabezados de columna, filas con acción accesible y estados que combinan texto y color.
-- **Menú de acciones.** Botón ⋮ con nombre específico para el registro y estado expandido. Un segundo clic, un clic fuera o Escape cierran el menú. Abrir otro menú cierra el anterior.
-- **Modal.** Un patrón común para detalles, configuración y confirmaciones. Cierra con el botón de cierre, clic en el fondo o Escape. El foco regresa al control de origen.
+- **Menú de acciones.** Botón ⋮ con nombre específico para el registro y estado expandido. Un segundo clic, un clic fuera o Escape cierran el menú. Abrir otro menú cierra el anterior. El teclado lleva el foco a la primera acción y las flechas permiten recorrerlas.
+- **Modal.** Un patrón común para detalles, configuración y confirmaciones, con encabezado, contenido y acciones diferenciados. Cierra con el botón de cierre, clic en el fondo o Escape. El foco regresa al control de origen.
+- **Movimiento.** Los menús y modales que se abren con el puntero aparecen con un fundido breve. Al usar el teclado o activar movimiento reducido, los controles responden al instante.
 - **Lista de skills desplegable.** Control con `aria-expanded` y panel asociado. Se mantiene la altura natural al expandir el contenido.
 
 ## Criterios de aceptación

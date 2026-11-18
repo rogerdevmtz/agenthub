@@ -43,29 +43,32 @@
     <a href="#dashboard" aria-label="Roger Martínez · Inicio de AgentHub" class="absolute left-1/2 top-3 hidden -translate-x-1/2 rounded-xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-lime-600 sm:block">
       <svg data-brand viewBox="0 0 60 56" class="block w-[60px] [filter:url(#brand-light)] dark:[filter:url(#brand-dark)]" aria-hidden="true"><use href="#brand-stacked"/></svg>
     </a>
-    <nav id="navigation" aria-label="Secciones del panel" class="grid w-full grid-cols-6 gap-1 p-1.5 sm:flex sm:flex-col sm:items-center sm:gap-2.5 sm:p-0 sm:pt-[93px]"></nav>
+    <nav id="navigation" aria-label="Secciones del panel" class="grid w-full grid-cols-6 gap-1 p-1.5 sm:flex sm:flex-col sm:items-center sm:gap-2.5 sm:p-0 sm:pt-[93px] sm:[@media(max-height:500px)]:gap-1 sm:[@media(max-height:500px)]:pt-[77px]"></nav>
   </aside>
 
-  <div class="pb-24 sm:ml-[94px] sm:pb-8">
-    <header class="mx-auto flex min-h-[78px] max-w-[1620px] items-center justify-between gap-4 px-4 sm:min-h-[92px] sm:px-6">
+  <div class="pb-24 sm:ml-[94px] sm:pb-10">
+    <header class="mx-auto grid max-w-[1620px] grid-cols-[minmax(0,1fr)_auto] items-center gap-x-4 gap-y-5 px-4 pb-6 pt-3 sm:px-6 sm:pb-7 sm:pt-[86px] xl:px-8">
       <a href="#dashboard" aria-label="Roger Martínez · Inicio de AgentHub" class="shrink-0 rounded-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-lime-600 sm:hidden">
         <svg data-brand viewBox="0 0 60 56" class="block w-[54px] [filter:url(#brand-light)] dark:[filter:url(#brand-dark)]" aria-hidden="true"><use href="#brand-stacked"/></svg>
       </a>
-      <button id="theme-toggle" title="Cambiar tema" type="button" aria-pressed="true" aria-label="Modo oscuro" class="ml-auto grid size-12 shrink-0 place-items-center rounded-full border border-[#dce2ee] bg-[#f8faff] text-[#20293a] shadow-sm hover:border-lime-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-lime-600 dark:border-white/10 dark:bg-[#1b1d20] dark:text-inherit dark:shadow-none dark:hover:border-lime-300 dark:focus-visible:outline-lime-300"></button>
+      <div class="group relative col-start-2 row-start-1 justify-self-end">
+        <button id="theme-toggle" type="button" aria-pressed="true" aria-label="Modo oscuro" class="peer grid size-11 place-items-center rounded-xl border border-[#dce2ee] bg-[#f8faff] text-[#20293a] shadow-sm hover:border-lime-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-lime-600 dark:border-white/10 dark:bg-[#1b1d20] dark:text-inherit dark:shadow-none dark:hover:border-lime-300 dark:focus-visible:outline-lime-300 sm:size-12"></button>
+        <span id="theme-tooltip" aria-hidden="true" class="pointer-events-none absolute right-0 top-full z-30 mt-2 hidden whitespace-nowrap rounded-lg border border-[#dce2ee] bg-[#fcfdff] px-2.5 py-1.5 text-xs text-[#20293a] shadow-sm peer-focus-visible:block [@media(hover:hover)]:group-hover:block dark:border-white/15 dark:bg-[#222528] dark:text-[#f5f6f3]"></span>
+      </div>
+      <div class="col-span-2 row-start-2 min-w-0 sm:col-span-1 sm:col-start-1 sm:row-start-1">
+        <h1 id="heading" tabindex="-1" class="text-[30px] font-semibold leading-tight tracking-[-0.04em] outline-none sm:text-[34px]">Dashboard</h1>
+        <p id="description" class="mt-1.5 text-sm leading-relaxed text-[#465065] dark:text-[#b5b8bf] sm:text-base"></p>
+      </div>
     </header>
 
-    <main id="contenido" tabindex="-1" class="mx-auto max-w-[1620px] px-4 pt-4 outline-none sm:px-6 sm:pt-3">
-      <div class="mb-7 sm:mb-[26px]">
-        <h1 id="heading" class="text-[30px] font-semibold leading-tight tracking-[-0.04em] sm:text-[34px]">Dashboard</h1>
-        <p id="description" class="mt-1 text-sm text-[#465065] dark:text-[#b5b8bf] sm:text-base"></p>
-      </div>
+    <main id="contenido" tabindex="-1" class="mx-auto max-w-[1620px] px-4 outline-none sm:px-6 xl:px-8">
       <p id="announcement" class="sr-only" role="status"></p>
       <section id="view" aria-labelledby="heading"></section>
     </main>
   </div>
 
-  <dialog id="record-dialog" aria-labelledby="dialog-title" class="m-auto w-[calc(100%-2rem)] max-w-xl overflow-y-auto rounded-2xl border border-[#dce2ee] bg-[#fcfdff] p-0 text-[#182131] shadow-2xl backdrop:bg-[#23334b]/45 dark:border-white/15 dark:bg-[#191b1e] dark:text-[#f5f6f3] dark:backdrop:bg-black/65">
-    <div id="dialog-panel" class="p-5 sm:p-6"></div>
+  <dialog id="record-dialog" aria-labelledby="dialog-title" class="m-auto max-h-[calc(100dvh-2rem)] w-[calc(100%-2rem)] max-w-xl overflow-y-auto rounded-2xl border border-[#dce2ee] bg-[#fcfdff] p-0 text-[#182131] shadow-2xl backdrop:bg-[#23334b]/45 dark:border-white/15 dark:bg-[#191b1e] dark:text-[#f5f6f3] dark:backdrop:bg-black/65">
+    <div id="dialog-panel"></div>
   </dialog>
 </body>
 </html>
