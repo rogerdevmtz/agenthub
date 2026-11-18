@@ -149,15 +149,11 @@ function weeklyActivity() {
     <div class="rounded-xl border border-dashed border-[#c0cdb5] bg-[#fbfcf7] p-3 dark:border-white/15 dark:bg-black/15 sm:p-4" aria-hidden="true">
         <svg viewBox="0 0 760 195" preserveAspectRatio="none" class="block h-[164px] w-full sm:h-[230px]">
           <defs>
-            <pattern id="activity-grid" width="108.6" height="32.3" patternUnits="userSpaceOnUse">
-              <path d="M108.6 0H0V32.3" class="stroke-[#98a689]/65 dark:stroke-white/25" stroke-dasharray="2 4" stroke-width="1" fill="none"/>
-            </pattern>
             <linearGradient id="activity-fill" x1="0" y1="0" x2="0" y2="1">
               <stop class="text-[#a5c563] dark:text-[#9de223]" stop-color="currentColor" stop-opacity=".48"/>
               <stop offset="100%" class="text-[#8eb734] dark:text-[#a4ec23]" stop-color="currentColor" stop-opacity="0"/>
             </linearGradient>
           </defs>
-          <rect width="760" height="193" fill="url(#activity-grid)"/>
           <path d="${activityPath}V195H1Z" fill="url(#activity-fill)"/>
           <path d="${activityPath}" fill="none" stroke="currentColor" stroke-width="2" vector-effect="non-scaling-stroke" class="text-[#528118] dark:text-[#c7ff4f]"/>
           <path d="${otherPath}" fill="none" stroke="currentColor" stroke-width="1.7" vector-effect="non-scaling-stroke" class="text-[#687b62] dark:text-slate-100"/>

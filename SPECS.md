@@ -24,7 +24,7 @@ La captura de Nexo aportada para el proyecto guía las proporciones, las superfi
 
 1. Mostrar tarjetas para ingresos totales del mes, pérdidas por descuentos y cupones, agentes activos y agentes fallando. Cada tarjeta lleva icono, etiqueta y valor de ejemplo.
 2. Dar a cada tarjeta un acento semántico, una superficie grafito con textura que se desvanece desde la esquina superior derecha y una línea decorativa con relleno sutil. Mantener alineados iconos, etiquetas y cifras.
-3. Debajo de las cuatro tarjetas, reservar un bloque de ancho completo para «Actividad semanal». Delimitar el marcador con borde discontinuo y mostrar una cuadrícula con curvas ilustrativas identificadas como gráfico de ejemplo.
+3. Debajo de las cuatro tarjetas, reservar un bloque de ancho completo para «Actividad semanal». Delimitar el marcador con borde discontinuo y mostrar curvas ilustrativas identificadas como gráfico de ejemplo.
 
 ### Usuarios
 
