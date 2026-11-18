@@ -24,13 +24,13 @@ const views = {
   errores: { title: 'Log de errores', short: 'Errores', description: 'Incidencias de ejecución y estado de resolución.' },
 };
 
-const surface = 'rounded-2xl border border-black/10 bg-white dark:border-[#303338] dark:bg-[#17191c]';
-const muted = 'text-[#576052] dark:text-[#b5b8bf]';
+const surface = 'rounded-2xl border border-[#dbe3d4] bg-[#fffefa] dark:border-[#303338] dark:bg-[#17191c]';
+const muted = 'text-[#4c5948] dark:text-[#b5b8bf]';
 const focus = 'focus-visible:outline focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-lime-700 dark:focus-visible:outline-lime-300';
-const button = `inline-flex min-h-10 items-center justify-center rounded-xl border border-black/10 px-3.5 text-sm font-medium hover:bg-black/5 dark:border-white/15 dark:hover:bg-white/10 ${focus}`;
-const primary = `inline-flex min-h-10 items-center justify-center rounded-xl bg-[#c7ff4f] px-4 text-sm font-semibold text-[#1a220b] hover:bg-lime-300 ${focus}`;
-const divider = 'divide-y divide-black/10 dark:divide-white/10';
-const dashboardPanel = `${surface} shadow-sm dark:bg-[linear-gradient(153deg,#242628_0%,#151719_49%,#131517_100%)]`;
+const button = `inline-flex min-h-10 items-center justify-center rounded-xl border border-[#d9e2d0] px-3.5 text-sm font-medium hover:bg-[#ecf2e4] dark:border-white/15 dark:hover:bg-white/10 ${focus}`;
+const primary = `inline-flex min-h-10 items-center justify-center rounded-xl bg-[#d9f49f] px-4 text-sm font-semibold text-[#1a220b] hover:bg-[#cdec83] dark:bg-[#c7ff4f] dark:hover:bg-lime-300 ${focus}`;
+const divider = 'divide-y divide-[#e2e8da] dark:divide-white/10';
+const dashboardPanel = `${surface} bg-[linear-gradient(145deg,#ffffff_21%,#f4f7ec_100%)] shadow-[0_8px_22px_#3140180c] dark:bg-[linear-gradient(153deg,#242628_0%,#151719_49%,#131517_100%)] dark:shadow-sm`;
 
 const nav = document.querySelector('#navigation');
 const view = document.querySelector('#view');
@@ -76,9 +76,9 @@ function chips(labels) {
 
 function actionMenu(record, label, actions, opensUp = false) {
   return `<div class="relative inline-flex text-left" data-menu>
-    <button id="action-${record.id}" type="button" data-menu-button aria-label="Acciones de ${label}" aria-controls="menu-${record.id}" aria-expanded="false" class="grid size-10 place-items-center rounded-xl text-xl leading-none hover:bg-black/5 dark:hover:bg-white/10 ${focus}">⋮</button>
-    <div hidden id="menu-${record.id}" data-menu-panel class="absolute right-0 ${opensUp ? 'bottom-full mb-1' : 'top-full mt-1'} z-10 w-48 rounded-xl border border-black/10 bg-white p-1 shadow-lg dark:border-white/15 dark:bg-[#222528]">
-      ${actions.map(([action, title, disabled]) => `<button type="button" data-action="${action}" data-id="${record.id}" ${disabled ? 'disabled' : ''} class="block min-h-9 w-full rounded-lg px-3 text-left text-sm enabled:hover:bg-black/5 disabled:opacity-50 dark:enabled:hover:bg-white/10 ${focus}">${title}</button>`).join('')}
+    <button id="action-${record.id}" type="button" data-menu-button aria-label="Acciones de ${label}" aria-controls="menu-${record.id}" aria-expanded="false" class="grid size-10 place-items-center rounded-xl text-xl leading-none hover:bg-[#eaf1e2] dark:hover:bg-white/10 ${focus}">⋮</button>
+    <div hidden id="menu-${record.id}" data-menu-panel class="absolute right-0 ${opensUp ? 'bottom-full mb-1' : 'top-full mt-1'} z-10 w-48 rounded-xl border border-[#dbe3d4] bg-[#fffefa] p-1 shadow-lg dark:border-white/15 dark:bg-[#222528]">
+      ${actions.map(([action, title, disabled]) => `<button type="button" data-action="${action}" data-id="${record.id}" ${disabled ? 'disabled' : ''} class="block min-h-9 w-full rounded-lg px-3 text-left text-sm enabled:hover:bg-[#eaf1e2] disabled:opacity-50 dark:enabled:hover:bg-white/10 ${focus}">${title}</button>`).join('')}
     </div>
   </div>`;
 }
@@ -89,11 +89,11 @@ function table(headers, rows, emptyText) {
   }
   return `<div class="${surface} overflow-x-auto ${rows.length <= 2 ? 'min-h-[190px]' : ''}" role="region" aria-label="Listado de ${views[currentView].title}" tabindex="0">
     <table class="w-full min-w-max text-left text-sm">
-      <thead class="border-b border-black/10 bg-black/[0.025] dark:border-white/10 dark:bg-white/[0.025]">
+      <thead class="border-b border-[#dbe3d4] bg-[#eef3e7] dark:border-white/10 dark:bg-white/[0.025]">
         <tr>${headers.map((header, i) => `<th scope="col" class="px-4 py-4 text-xs font-semibold ${muted} ${i === headers.length - 1 ? 'text-right' : ''}">${header}</th>`).join('')}</tr>
       </thead>
       <tbody class="${divider}">
-        ${rows.map(cells => `<tr class="hover:bg-black/[0.02] dark:hover:bg-white/[0.025]">
+        ${rows.map(cells => `<tr class="hover:bg-[#f2f6eb] dark:hover:bg-white/[0.025]">
           <th scope="row" class="px-4 py-3 font-semibold">${cells[0]}</th>
           ${cells.slice(1).map((cell, i) => `<td class="px-4 py-2.5 ${i === cells.length - 2 ? 'w-20 text-right' : ''}">${cell}</td>`).join('')}
         </tr>`).join('')}
@@ -119,8 +119,8 @@ function dashboard() {
   ];
   return `<div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4" aria-label="Métricas principales">
     ${metrics.map((metric, index) => `<article data-metric class="${dashboardPanel} relative isolate min-h-[126px] overflow-hidden px-4 py-3.5 sm:px-5">
-      <div data-metric-texture class="pointer-events-none absolute inset-0 -z-10 hidden bg-[radial-gradient(circle,#ffffff_0.7px,transparent_1px)] bg-[length:3px_3px] opacity-[0.19] [mask-image:radial-gradient(ellipse_80%_130%_at_100%_0%,black_0%,rgba(0,0,0,0.82)_25%,rgba(0,0,0,0.25)_63%,rgba(0,0,0,0.04)_87%,transparent_100%)] dark:block" aria-hidden="true"></div>
-      <svg viewBox="0 0 98 48" class="pointer-events-none absolute bottom-4 right-3 -z-10 h-12 w-[29%] min-w-16 text-[#578600] dark:text-[#c7ff4f]" aria-hidden="true">
+      <div data-metric-texture class="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(circle,#52762b_0.7px,transparent_1px)] bg-[length:3px_3px] opacity-[0.21] [mask-image:radial-gradient(ellipse_80%_130%_at_100%_0%,black_0%,rgba(0,0,0,0.82)_25%,rgba(0,0,0,0.25)_63%,rgba(0,0,0,0.04)_87%,transparent_100%)] dark:bg-[radial-gradient(circle,#ffffff_0.7px,transparent_1px)] dark:opacity-[0.19]" aria-hidden="true"></div>
+      <svg viewBox="0 0 98 48" class="pointer-events-none absolute bottom-4 right-3 -z-10 h-12 w-[29%] min-w-16 text-[#528118] dark:text-[#c7ff4f]" aria-hidden="true">
         <defs>
           <linearGradient id="metric-fill-${index}" x2="0" y2="1">
             <stop stop-color="currentColor" stop-opacity=".29"/>
@@ -130,7 +130,7 @@ function dashboard() {
         <path d="${trends[index]}V48H3Z" fill="url(#metric-fill-${index})"/>
         <path d="${trends[index]}" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" class="dark:drop-shadow-[0_0_4px_#a3f52d]"/>
       </svg>
-      <h2 class="flex items-center gap-2.5 text-sm font-medium"><span class="grid size-8 shrink-0 place-items-center rounded-lg bg-black/5 ${metric.color} dark:bg-white/[0.075]">${icon(metric.key)}</span>${metric.name}</h2>
+      <h2 class="flex items-center gap-2.5 text-sm font-medium"><span class="grid size-8 shrink-0 place-items-center rounded-lg bg-[#ecf2e4] ${metric.color} dark:bg-white/[0.075]">${icon(metric.key)}</span>${metric.name}</h2>
       <p class="mt-2.5 text-[26px] font-semibold leading-tight tracking-tight tabular-nums">${metric.value}</p>
       <p class="mt-1 pr-[24%] text-xs ${muted}">${metric.detail}</p>
     </article>`).join('')}
@@ -139,29 +139,31 @@ function dashboard() {
 }
 
 function weeklyActivity() {
-  const activityPath = 'M1 177C25 177 38 175 62 163S92 133 123 131S157 139 183 114S216 82 245 96S286 121 318 96S354 70 381 79S426 96 451 71S484 49 511 53S541 69 569 48S610 21 640 33S674 49 704 28S737 24 759 17';
-  const otherPath = 'M1 186C26 187 45 187 71 177S101 155 128 157S155 172 184 152S218 132 247 142S279 155 305 137S338 122 367 129S410 141 438 120S476 101 505 107S539 119 564 99S600 82 631 92S671 105 698 83S729 80 759 68';
+  const activityPath = 'M1 177C25 177 38 175 62 163S92 133 123 131S157 139 183 114S216 82 245 96S286 121 318 96S354 70 381 79S426 96 451 71S484 49 511 53S541 69 569 48S610 21 640 33S674 49 704 28S731 24 749 17';
+  const otherPath = 'M1 186C26 187 45 187 71 177S101 155 128 157S155 172 184 152S218 132 247 142S279 155 305 137S338 122 367 129S410 141 438 120S476 101 505 107S539 119 564 99S600 82 631 92S671 105 698 83S725 80 749 68';
   return `<figure id="activity" class="${dashboardPanel} mt-5 min-w-0 px-4 pb-4 pt-4 sm:px-5 sm:pb-5">
     <figcaption class="mb-4 flex flex-wrap items-center justify-between gap-2">
       <h2 class="text-[22px] font-semibold tracking-tight">Actividad semanal</h2>
-      <span class="rounded-full border border-black/15 px-3 py-1.5 text-[11px] ${muted} dark:border-white/15">Gráfico de ejemplo</span>
+      <span class="rounded-full border border-[#d5dfc9] bg-[#edf3e5] px-3 py-1.5 text-[11px] ${muted} dark:border-white/15 dark:bg-transparent">Gráfico de ejemplo</span>
     </figcaption>
-    <div class="rounded-xl border border-dashed border-black/15 bg-black/[0.015] p-3 dark:border-white/15 dark:bg-black/15 sm:p-4" aria-hidden="true">
+    <div class="rounded-xl border border-dashed border-[#c0cdb5] bg-[#fbfcf7] p-3 dark:border-white/15 dark:bg-black/15 sm:p-4" aria-hidden="true">
         <svg viewBox="0 0 760 195" preserveAspectRatio="none" class="block h-[164px] w-full sm:h-[230px]">
           <defs>
             <pattern id="activity-grid" width="108.6" height="32.3" patternUnits="userSpaceOnUse">
-              <path d="M108.6 0H0V32.3" class="stroke-black/20 dark:stroke-white/25" stroke-dasharray="2 4" stroke-width="1" fill="none"/>
+              <path d="M108.6 0H0V32.3" class="stroke-[#98a689]/65 dark:stroke-white/25" stroke-dasharray="2 4" stroke-width="1" fill="none"/>
             </pattern>
             <linearGradient id="activity-fill" x1="0" y1="0" x2="0" y2="1">
-              <stop class="text-[#88b333] dark:text-[#9de223]" stop-color="currentColor" stop-opacity=".48"/>
+              <stop class="text-[#a5c563] dark:text-[#9de223]" stop-color="currentColor" stop-opacity=".48"/>
               <stop offset="100%" class="text-[#8eb734] dark:text-[#a4ec23]" stop-color="currentColor" stop-opacity="0"/>
             </linearGradient>
           </defs>
           <rect width="760" height="193" fill="url(#activity-grid)"/>
           <path d="${activityPath}V195H1Z" fill="url(#activity-fill)"/>
-          <path d="${activityPath}" fill="none" stroke="currentColor" stroke-width="2" vector-effect="non-scaling-stroke" class="text-[#578600] dark:text-[#c7ff4f]"/>
-          <path d="${otherPath}" fill="none" stroke="currentColor" stroke-width="1.7" vector-effect="non-scaling-stroke" class="text-slate-600 dark:text-slate-100"/>
-          <path d="M0 194H760" class="stroke-black/25 dark:stroke-white/25" stroke-width="1"/>
+          <path d="${activityPath}" fill="none" stroke="currentColor" stroke-width="2" vector-effect="non-scaling-stroke" class="text-[#528118] dark:text-[#c7ff4f]"/>
+          <path d="${otherPath}" fill="none" stroke="currentColor" stroke-width="1.7" vector-effect="non-scaling-stroke" class="text-[#687b62] dark:text-slate-100"/>
+          <circle cx="749" cy="17" r="3.6" class="fill-[#528118] stroke-[#fbfcf7] dark:fill-[#c7ff4f] dark:stroke-[#263112]" vector-effect="non-scaling-stroke"/>
+          <circle cx="749" cy="68" r="3.6" class="fill-[#687b62] stroke-[#fbfcf7] dark:fill-slate-100 dark:stroke-[#263112]" vector-effect="non-scaling-stroke"/>
+          <path d="M0 194H760" class="stroke-[#b4c1a8] dark:stroke-white/25" stroke-width="1"/>
         </svg>
         <div class="mt-2 grid grid-cols-7 text-center text-[11px] ${muted}"><span>Lun</span><span>Mar</span><span>Mié</span><span>Jue</span><span>Vie</span><span>Sáb</span><span>Dom</span></div>
     </div>
@@ -257,9 +259,10 @@ function render() {
   document.querySelector('#description').textContent = views[currentView].description;
   nav.innerHTML = Object.entries(views).map(([name, data]) => {
     const active = name === currentView;
-    const tone = active ? 'bg-[#c7ff4f] text-[#1a220b]' : `${muted} hover:bg-black/5 dark:hover:bg-white/10`;
-    return `<a href="#${name}" aria-label="${data.title}" title="${data.title}" ${active ? 'aria-current="page"' : ''} class="flex min-h-12 min-w-0 flex-col items-center justify-center gap-1 rounded-[15px] px-1 text-center font-medium sm:w-12 sm:px-0 ${focus} ${tone}">
+    const tone = active ? 'bg-[#daf3a1] text-[#233516] dark:bg-[#c7ff4f] dark:text-[#1a220b]' : `${muted} hover:bg-[#ebf1e2] dark:hover:bg-white/10`;
+    return `<a href="#${name}" aria-label="${data.title}" ${active ? 'aria-current="page"' : ''} class="group relative flex min-h-12 min-w-0 flex-col items-center justify-center gap-1 rounded-[15px] px-1 text-center font-medium sm:w-12 sm:px-0 ${focus} ${tone}">
       ${icon(name)}<span class="text-[9px] leading-none sm:hidden">${data.short}</span>
+      <span aria-hidden="true" class="pointer-events-none absolute left-[calc(100%+10px)] top-1/2 hidden -translate-y-1/2 whitespace-nowrap rounded-lg border border-[#dce4d2] bg-[#fffefa] px-2.5 py-1.5 text-xs text-[#263120] shadow-sm dark:border-white/15 dark:bg-[#222528] dark:text-[#f5f6f3] sm:group-hover:block sm:group-focus-visible:block">${data.title}</span>
     </a>`;
   }).join('');
   openMenu = undefined;

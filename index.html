@@ -15,10 +15,10 @@
   <script src="data.js" defer></script>
   <script src="app.js" defer></script>
 </head>
-<body class="min-h-screen bg-[#f4f5f1] font-sans text-[#191c18] antialiased dark:bg-[#0c0d0f] dark:bg-[radial-gradient(ellipse_at_27%_0%,#222528_0%,transparent_38%)] dark:text-[#f5f6f3]">
+<body class="min-h-screen bg-[#f0f2ea] bg-[radial-gradient(ellipse_at_28%_0%,#e0ead0_0%,transparent_49%)] font-sans text-[#20271c] antialiased dark:bg-[#0c0d0f] dark:bg-[radial-gradient(ellipse_at_27%_0%,#222528_0%,transparent_38%)] dark:text-[#f5f6f3]">
   <a id="skip-link" href="#contenido" class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-xl focus:bg-lime-300 focus:px-4 focus:py-2 focus:text-black">Saltar al contenido</a>
 
-  <aside class="fixed inset-x-0 bottom-0 z-20 flex border-t border-black/10 bg-white dark:border-white/10 dark:bg-[#121416] sm:inset-x-auto sm:bottom-5 sm:left-3.5 sm:top-[17px] sm:w-[72px] sm:flex-col sm:rounded-[26px] sm:border">
+  <aside class="fixed inset-x-0 bottom-0 z-20 flex border-t border-[#dbe3d2] bg-[#fcfdf8] shadow-[0_6px_24px_#3140180b] dark:border-white/10 dark:bg-[#121416] dark:shadow-none sm:inset-x-auto sm:bottom-5 sm:left-3.5 sm:top-[17px] sm:w-[72px] sm:flex-col sm:rounded-[26px] sm:border">
     <nav id="navigation" aria-label="Secciones del panel" class="grid w-full grid-cols-6 gap-1 p-1.5 sm:flex sm:flex-col sm:items-center sm:gap-2.5 sm:p-0 sm:pt-[93px]"></nav>
   </aside>
 
@@ -36,22 +36,22 @@
         </defs>
       </svg>
       <a href="#dashboard" aria-label="Roger Martínez · Inicio de AgentHub" class="-ml-2 shrink-0 rounded-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-lime-600">
-        <img src="assets/roger-martinez.webp" alt="Roger Martínez" width="272" height="91" class="h-auto w-40 [filter:url(#brand-light)] sm:w-48 dark:[filter:url(#brand-dark)]">
+        <img src="assets/roger-martinez.webp" alt="Roger Martínez" width="272" height="91" class="h-auto w-[148px] [filter:url(#brand-light)] sm:w-[170px] dark:[filter:url(#brand-dark)]">
       </a>
-      <button id="theme-toggle" title="Cambiar tema" type="button" aria-pressed="true" aria-label="Modo oscuro" class="grid size-12 shrink-0 place-items-center rounded-full border border-black/10 bg-white hover:border-lime-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-lime-600 dark:border-white/10 dark:bg-[#1b1d20] dark:hover:border-lime-300 dark:focus-visible:outline-lime-300"></button>
+      <button id="theme-toggle" title="Cambiar tema" type="button" aria-pressed="true" aria-label="Modo oscuro" class="grid size-12 shrink-0 place-items-center rounded-full border border-[#d5dfc8] bg-[#fcfdf8] text-[#426318] shadow-sm hover:border-lime-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-lime-600 dark:border-white/10 dark:bg-[#1b1d20] dark:text-inherit dark:shadow-none dark:hover:border-lime-300 dark:focus-visible:outline-lime-300"></button>
     </header>
 
     <main id="contenido" tabindex="-1" class="mx-auto max-w-[1620px] px-4 pt-4 outline-none sm:px-6 sm:pt-3">
       <div class="mb-7 sm:mb-[26px]">
         <h1 id="heading" class="text-[30px] font-semibold leading-tight tracking-[-0.04em] sm:text-[34px]">Dashboard</h1>
-        <p id="description" class="mt-1 text-sm text-[#576052] dark:text-[#b5b8bf] sm:text-base"></p>
+        <p id="description" class="mt-1 text-sm text-[#4c5948] dark:text-[#b5b8bf] sm:text-base"></p>
       </div>
       <p id="announcement" class="sr-only" role="status"></p>
       <section id="view" aria-labelledby="heading"></section>
     </main>
   </div>
 
-  <dialog id="record-dialog" aria-labelledby="dialog-title" class="m-auto w-[calc(100%-2rem)] max-w-xl overflow-y-auto rounded-2xl border border-black/10 bg-white p-0 text-[#191c18] shadow-2xl backdrop:bg-black/65 dark:border-white/15 dark:bg-[#191b1e] dark:text-[#f5f6f3]">
+  <dialog id="record-dialog" aria-labelledby="dialog-title" class="m-auto w-[calc(100%-2rem)] max-w-xl overflow-y-auto rounded-2xl border border-[#dce3d3] bg-[#fffefa] p-0 text-[#20271c] shadow-2xl backdrop:bg-[#26351d]/45 dark:border-white/15 dark:bg-[#191b1e] dark:text-[#f5f6f3] dark:backdrop:bg-black/65">
     <div id="dialog-panel" class="p-5 sm:p-6"></div>
   </dialog>
 </body>
