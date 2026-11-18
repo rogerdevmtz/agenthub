@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="es" class="dark [color-scheme:light] dark:[color-scheme:dark]">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark light">
+  <title>AgentHub | Dashboard</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script>
+    tailwind.config = { darkMode: 'class' };
+    try {
+      document.documentElement.classList.toggle('dark', localStorage.getItem('agenthub-theme') !== 'light');
+    } catch {}
+  </script>
+  <script src="data.js" defer></script>
+  <script src="app.js" defer></script>
+</head>
+<body class="min-h-screen bg-[#f4f5f1] font-sans text-[#191c18] antialiased dark:bg-[#0c0d0f] dark:text-[#f5f6f3]">
+  <a id="skip-link" href="#contenido" class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-xl focus:bg-lime-300 focus:px-4 focus:py-2 focus:text-black">Saltar al contenido</a>
+
+  <aside class="fixed inset-x-0 bottom-0 z-20 flex border-t border-black/10 bg-white dark:border-white/10 dark:bg-[#131517] sm:inset-x-auto sm:bottom-3 sm:left-3 sm:top-3 sm:w-[68px] sm:flex-col sm:rounded-[22px] sm:border xl:w-[184px]">
+    <div class="hidden h-[72px] items-center gap-3 px-4 sm:flex">
+      <span class="grid size-9 shrink-0 place-items-center rounded-xl bg-[#c7ff4f] text-lg font-black text-[#1a220b]" aria-hidden="true">A</span>
+      <span class="hidden text-[19px] font-semibold tracking-tight xl:inline">AgentHub</span>
+    </div>
+    <nav id="navigation" aria-label="Secciones del panel" class="grid w-full grid-cols-6 gap-1 p-1.5 sm:flex sm:flex-col sm:gap-2 sm:px-2 xl:px-3"></nav>
+    <div class="mt-auto hidden px-4 pb-5 text-xs text-[#576052] dark:text-[#b5b8bf] xl:block">Panel de administración</div>
+  </aside>
+
+  <div class="pb-24 sm:ml-[92px] sm:pb-8 xl:ml-[208px]">
+    <header class="mx-auto flex min-h-[80px] max-w-[1580px] items-center justify-between gap-4 border-b border-black/10 px-4 dark:border-white/10 sm:px-6">
+      <div class="flex min-w-0 items-center gap-3 text-sm text-[#576052] dark:text-[#b5b8bf]">
+        <span class="grid size-9 shrink-0 place-items-center rounded-xl bg-[#c7ff4f] font-black text-[#1a220b] sm:hidden" aria-hidden="true">A</span>
+        <span class="font-semibold text-[#191c18] dark:text-[#f5f6f3] sm:hidden">AgentHub</span>
+        <span class="hidden sm:inline">Administración</span>
+      </div>
+      <button id="theme-toggle" type="button" aria-pressed="true" aria-label="Modo oscuro" class="flex min-h-11 shrink-0 items-center gap-2 rounded-full border border-black/10 bg-white px-3 text-sm font-medium hover:border-lime-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-lime-600 dark:border-white/15 dark:bg-[#1b1d20] dark:hover:border-lime-300 dark:focus-visible:outline-lime-300"></button>
+    </header>
+
+    <main id="contenido" tabindex="-1" class="mx-auto max-w-[1580px] px-4 pt-7 outline-none sm:px-6 sm:pt-9">
+      <div class="mb-7">
+        <h1 id="heading" class="text-[30px] font-semibold leading-tight tracking-tight sm:text-[32px]">Dashboard</h1>
+        <p id="description" class="mt-1.5 text-sm text-[#576052] dark:text-[#b5b8bf]"></p>
+      </div>
+      <p id="announcement" class="sr-only" role="status"></p>
+      <section id="view" aria-labelledby="heading"></section>
+    </main>
+  </div>
+
+  <dialog id="record-dialog" aria-labelledby="dialog-title" class="m-auto w-[calc(100%-2rem)] max-w-xl overflow-y-auto rounded-2xl border border-black/10 bg-white p-0 text-[#191c18] shadow-2xl backdrop:bg-black/65 dark:border-white/15 dark:bg-[#191b1e] dark:text-[#f5f6f3]">
+    <div id="dialog-panel" class="p-5 sm:p-6"></div>
+  </dialog>
+</body>
+</html>

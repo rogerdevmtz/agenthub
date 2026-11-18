@@ -1,41 +1,28 @@
-# HTML Hello
+# AgentHub
 
-The most basic boilerplate for any 4Geeks Academy student, start your very first website from scratch.
+Prototipo del panel de administración de una plataforma de alquiler de agentes de IA. Incluye Dashboard, Usuarios, Agentes, Skills, Contrataciones y Log de errores.
 
-> There is a video tutorial on [how to use this template to create your very first website here](https://youtu.be/dfbDCMu_p-0).
+## Abrir en local
 
-## What to do next?
+Abre `index.html` en Chrome o Edge. El navegador necesita conexión a Internet para cargar Tailwind desde su CDN.
 
-Create an `index.html` file with the [basic HTML structure](http://4geeks.com/lesson/what-is-html-learn-html#page-structure) and see it live by running a web-server using the following command:
+También puedes servir la carpeta con el servidor de desarrollo de Python, sin instalar dependencias.
 
-```bash
-$ pip3 install flask && python3 server.py
+```powershell
+python -m http.server 4173 --bind 127.0.0.1
 ```
 
-- You can create as many HTML files as you want.
-- You can also create CSS files and import them into your website using a `<link>` tag placed between the `<head></head>` tags, like this:
+Abre [http://127.0.0.1:4173/](http://127.0.0.1:4173/).
 
-```html
-<head>
-  ...
-  <link rel="stylesheet" type="text/css" href="styles.css">
-  ...
-</head>
-```
+## Probar el panel
 
-- If you want to use Tailwind CSS, add it optionally via the official Tailwind CSS v4 CDN inside the same `<head>`:
+- Navega entre las seis secciones y cambia el tema con el control de la barra superior.
+- Abre el menú ⋮ de un registro y prueba el detalle, la configuración o la acción disponible.
+- En Agentes, despliega las skills y edita el prompt de sistema desde «Configurar».
+- En Log de errores, consulta la traza y marca una incidencia como resuelta.
 
-```html
-<head>
-  ...
-  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-  <link rel="stylesheet" type="text/css" href="styles.css">
-  ...
-</head>
-```
+Los registros son ficticios. Las acciones de demostración se reinician al recargar y el tema elegido se conserva si el navegador permite almacenamiento local.
 
-### Contributors
+Consulta [SPECS.md](SPECS.md) para ver los requisitos y criterios de aceptación. El diseño de partida se generó en Google Stitch y se adaptó al prototipo.
 
-This template was built as part of the [Full Stack Developer course](https://4geeksacademy.com/us/coding-bootcamps/part-time-full-stack-developer) at [4Geeks Academy Coding Bootcamp](https://4geeksacademy.com/us/coding-bootcamp) by [Alejandro Sanchez](https://twitter.com/alesanchezr) and [many other contributors](https://github.com/4GeeksAcademy/html-hello/graphs/contributors).
-
-You can find other templates and resources like this at the [school's GitHub page](https://github.com/4geeksacademy/).
+Proyecto basado en la [plantilla HTML Hello de 4Geeks Academy](https://github.com/4GeeksAcademy/html-hello), de Alejandro Sánchez y sus colaboradores.
