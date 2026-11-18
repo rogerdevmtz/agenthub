@@ -151,7 +151,7 @@ function dashboard() {
       <p class="mt-1 pr-[24%] text-xs ${muted}">${metric.detail}</p>
     </article>`).join('')}
   </div>
-  <div id="dashboard-analysis" class="mt-5 grid gap-4 xl:grid-cols-[minmax(0,1.45fr)_minmax(0,1fr)]">
+  <div id="dashboard-analysis" class="mt-5 grid gap-4">
     ${weeklyActivity()}
     ${incomeBreakdown(monthContracts, revenue)}
   </div>`;
@@ -231,7 +231,7 @@ function incomeBreakdown(monthContracts, revenue) {
       </div>
       <a href="#contrataciones" class="${button} !min-h-8 !rounded-full !px-3 !text-xs">Ver contrataciones</a>
     </div>
-    <div class="mt-4 grid flex-1 items-center gap-4 sm:grid-cols-[9.75rem_minmax(0,1fr)] xl:grid-cols-[11.5rem_minmax(0,1fr)]">
+    <div class="mx-auto mt-4 grid w-full max-w-4xl flex-1 items-center gap-4 sm:grid-cols-[minmax(9.75rem,0.36fr)_minmax(0,1fr)] sm:gap-7">
       <div class="relative mx-auto size-[9.75rem] xl:size-[11.5rem]">
         <svg viewBox="0 0 160 160" class="size-full" aria-hidden="true">
           <circle cx="80" cy="80" r="69" fill="none" stroke-width="18" class="stroke-[#e4e9de] dark:stroke-white/10"/>
@@ -431,7 +431,8 @@ function showDetail(record, fromPointer) {
     skills: () => detailRows([['ID', record.id], ['Descripción', record.description], ['Agentes', agentsUsing(record).map(agent => agent.name).join(', ') || 'Sin asignaciones']]),
     contrataciones: () => detailRows([
       ['Cliente', nameOf(users, record.user)], ['Agente', nameOf(agents, record.agent)],
-      ['Inicio', formatDate(record.start)], ['Fin', formatDate(record.end)], ['Importe base', euros.format(record.base)],
+      ['Inicio', formatDate(record.start)], ['Fin', formatDate(record.end)], ['Estado', badge(record.status)],
+      ['Importe base', euros.format(record.base)],
       ...record.skills.map(skill => [nameOf(skills, skill.id), euros.format(skill.price)]), ['Total pagado', euros.format(contractTotal(record))],
     ]),
     errores: () => detailRows([['Agente', nameOf(agents, record.agent)], ['Fecha y hora', dateTime.format(new Date(record.timestamp))], ['Tipo', badge(record.type)], ['Descripción', record.description], ['Estado', badge(record.resolved ? 'Resuelto' : 'Pendiente')]]) +
