@@ -13,10 +13,11 @@ const icons = {
   sun: '<circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/>',
   chevron: '<path d="m6 9 6 6 6-6"/>',
   close: '<path d="m6 6 12 12M18 6 6 18"/>',
+  calendar: '<rect x="3" y="5" width="18" height="16" rx="3"/><path d="M7 3v4m10-4v4M3 10h18"/>',
 };
 
 const views = {
-  dashboard: { title: 'Dashboard', short: 'Inicio', description: 'Resumen de ingresos y estado de los agentes.' },
+  dashboard: { title: 'Dashboard', heading: 'Hola, Roger', short: 'Inicio', description: 'Aquí tienes el resumen de ingresos y el estado de tus agentes.' },
   usuarios: { title: 'Usuarios', short: 'Usuarios', description: 'Usuarios registrados, planes y estados de cuenta.' },
   agentes: { title: 'Agentes', short: 'Agentes', description: 'Estado, habilidades y configuración de cada agente.' },
   skills: { title: 'Skills', short: 'Skills', description: 'Una skill es una capacidad que puedes habilitar en un agente.' },
@@ -44,6 +45,8 @@ const dialog = document.querySelector('#record-dialog');
 const dialogPanel = document.querySelector('#dialog-panel');
 const themeToggle = document.querySelector('#theme-toggle');
 const themeTooltip = document.querySelector('#theme-tooltip');
+const dashboardPeriod = document.querySelector('#dashboard-period');
+const dashboardAccent = document.querySelector('#dashboard-accent');
 const announcement = document.querySelector('#announcement');
 const heading = document.querySelector('#heading');
 const expandedAgents = new Set();
@@ -51,7 +54,10 @@ let currentView;
 let openMenu;
 let openerId;
 
-const euros = new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR' });
+const euros = new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR', useGrouping: 'always' });
+const percent = new Intl.NumberFormat('es-ES', { style: 'percent', maximumFractionDigits: 1 });
+const billingMonth = '2026-11';
+const billingLabel = 'Noviembre 2026';
 const date = new Intl.DateTimeFormat('es-ES', { day: '2-digit', month: 'short', year: 'numeric', timeZone: 'Europe/Madrid' });
 const dateTime = new Intl.DateTimeFormat('es-ES', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Madrid' });
 const formatDate = value => date.format(new Date(value));
@@ -113,9 +119,10 @@ function table(headers, rows, emptyText) {
 
 function dashboard() {
   const visible = visibleRecords(agents);
-  const revenue = contracts.filter(item => item.start.startsWith('2026-11')).reduce((total, contract) => total + contractTotal(contract), 0);
+  const monthContracts = contracts.filter(item => item.start.startsWith(billingMonth));
+  const revenue = monthContracts.reduce((total, contract) => total + contractTotal(contract), 0);
   const metrics = [
-    { name: 'Ingresos del mes', value: euros.format(revenue), detail: 'Noviembre de 2026', key: 'money', color: 'bg-lime-50 text-lime-800 dark:text-[#c7ff4f]' },
+    { name: 'Ingresos del mes', value: euros.format(revenue), detail: 'Contrataciones del periodo', key: 'money', color: 'bg-lime-50 text-lime-800 dark:text-[#c7ff4f]' },
     { name: 'Descuentos y cupones', value: euros.format(-620), detail: 'Pérdida acumulada del mes', key: 'discount', color: 'bg-amber-50 text-amber-800 dark:text-amber-300' },
     { name: 'Agentes activos', value: visible.filter(agent => agent.status === 'Activo').length, detail: `De ${visible.length} agentes registrados`, key: 'agentes', color: 'bg-emerald-50 text-emerald-800 dark:text-emerald-300' },
     { name: 'Agentes fallando', value: visible.filter(agent => agent.status === 'Fallando').length, detail: 'Requieren revisión', key: 'errores', color: 'bg-rose-50 text-rose-800 dark:text-rose-300' },
@@ -144,7 +151,10 @@ function dashboard() {
       <p class="mt-1 pr-[24%] text-xs ${muted}">${metric.detail}</p>
     </article>`).join('')}
   </div>
-  ${weeklyActivity()}`;
+  <div id="dashboard-analysis" class="mt-5 grid gap-4 xl:grid-cols-[minmax(0,1.45fr)_minmax(0,1fr)]">
+    ${weeklyActivity()}
+    ${incomeBreakdown(monthContracts, revenue)}
+  </div>`;
 }
 
 function weeklyActivity() {
@@ -156,7 +166,7 @@ function weeklyActivity() {
   const plotHeight = 196;
   const columnWidth = plotWidth / days.length;
   const position = value => plotHeight * (1 - value / ticks[0]);
-  return `<figure id="activity" class="${dashboardPanel} mt-5 min-w-0 px-4 pb-4 pt-4 sm:px-5 sm:pb-5">
+  return `<figure id="activity" class="${dashboardPanel} min-w-0 px-4 pb-4 pt-4 sm:px-5 sm:pb-5">
     <figcaption class="flex flex-wrap items-center justify-between gap-2">
       <h2 class="text-[22px] font-semibold tracking-tight">Actividad semanal</h2>
       <span class="rounded-full border border-[#dce2ed] bg-[#f6f8fc] px-3 py-1.5 text-[11px] ${muted} dark:border-white/15 dark:bg-transparent">Gráfico de ejemplo</span>
@@ -192,6 +202,53 @@ function weeklyActivity() {
       </div>
     </div>
   </figure>`;
+}
+
+function incomeBreakdown(monthContracts, revenue) {
+  const totals = new Map();
+  for (const contract of monthContracts) {
+    totals.set(contract.agent, (totals.get(contract.agent) ?? 0) + contractTotal(contract));
+  }
+  const tones = [
+    'text-[#669b13] dark:text-[#c7ff4f]',
+    'text-[#8da664] dark:text-[#86b247]',
+    'text-[#b6c29b] dark:text-[#bdd3a2]',
+  ];
+  let offset = 0;
+  const rows = [...totals].sort((first, second) => second[1] - first[1]).map(([id, amount], index) => {
+    const part = revenue ? amount / revenue : 0;
+    const length = part * 100;
+    const start = offset;
+    offset += length;
+    return { name: nameOf(agents, id), amount, part, length, start, tone: tones[index % tones.length] };
+  });
+
+  return `<section id="income-breakdown" aria-labelledby="income-heading" class="${dashboardPanel} ${panelInset} flex min-w-0 flex-col py-4 sm:py-5">
+    <div class="flex flex-wrap items-center justify-between gap-3">
+      <div>
+        <h2 id="income-heading" class="text-[22px] font-semibold tracking-tight">Ingresos por agente</h2>
+        <p class="mt-0.5 text-sm ${muted}">Contrataciones iniciadas en el mes</p>
+      </div>
+      <a href="#contrataciones" class="${button} !min-h-8 !rounded-full !px-3 !text-xs">Ver contrataciones</a>
+    </div>
+    <div class="mt-4 grid flex-1 items-center gap-4 sm:grid-cols-[9.75rem_minmax(0,1fr)] xl:grid-cols-[11.5rem_minmax(0,1fr)]">
+      <div class="relative mx-auto size-[9.75rem] xl:size-[11.5rem]">
+        <svg viewBox="0 0 160 160" class="size-full" aria-hidden="true">
+          <circle cx="80" cy="80" r="69" fill="none" stroke-width="18" class="stroke-[#e4e9de] dark:stroke-white/10"/>
+          ${rows.filter(row => row.length > 0).map(row => `<circle data-income-segment cx="80" cy="80" r="69" pathLength="100" fill="none" stroke-width="18" stroke="currentColor" class="${row.tone}" transform="rotate(-90 80 80)" stroke-dasharray="${row.length} ${100 - row.length}" stroke-dashoffset="${-row.start}"/>`).join('')}
+        </svg>
+        <div class="absolute inset-0 grid place-content-center gap-0.5 text-center">
+          <p class="text-base font-semibold tracking-tight tabular-nums xl:text-lg">${euros.format(revenue)}</p>
+          <p class="text-xs ${muted}">Total del mes</p>
+        </div>
+      </div>
+      ${rows.length ? `<ul aria-label="Importe y participación por agente">${rows.map(row => `<li class="grid grid-cols-[minmax(0,1fr)_auto_auto] items-center gap-2 py-2.5 text-sm sm:gap-3">
+        <span class="flex min-w-0 items-center gap-2 font-medium"><span class="size-2.5 shrink-0 rounded-full bg-current ${row.tone}" aria-hidden="true"></span><span class="min-w-0 break-words">${row.name}</span></span>
+        <span class="whitespace-nowrap font-semibold tabular-nums">${euros.format(row.amount)}</span>
+        <span class="w-[6ch] whitespace-nowrap text-right text-xs tabular-nums ${muted}">${percent.format(row.part)}</span>
+      </li>`).join('')}</ul>` : `<p class="text-sm ${muted}">No hay contrataciones para este periodo.</p>`}
+    </div>
+  </section>`;
 }
 
 function userList() {
@@ -280,8 +337,12 @@ function render() {
   const key = location.hash.slice(1);
   currentView = Object.hasOwn(views, key) ? key : 'dashboard';
   document.title = `AgentHub | ${views[currentView].title}`;
-  heading.textContent = views[currentView].title;
+  const isDashboard = currentView === 'dashboard';
+  heading.textContent = views[currentView].heading ?? views[currentView].title;
   document.querySelector('#description').textContent = views[currentView].description;
+  dashboardAccent.classList.toggle('sm:block', isDashboard);
+  dashboardPeriod.hidden = !isDashboard;
+  dashboardPeriod.innerHTML = isDashboard ? `<time datetime="${billingMonth}" class="inline-flex min-h-11 items-center gap-2 whitespace-nowrap rounded-xl border border-[#dce2ee] bg-[#f8faff] px-2.5 text-xs font-medium ${muted} shadow-sm dark:border-white/15 dark:bg-[#1b1d20] dark:shadow-none sm:min-h-12 sm:px-4 sm:text-sm">${icon('calendar', 'size-4')}${billingLabel}</time>` : '';
   nav.innerHTML = Object.entries(views).map(([name, data]) => {
     const active = name === currentView;
     const tone = active ? 'bg-[#c7ff4f] text-[#233516] dark:bg-[#c7ff4f] dark:text-[#1a220b]' : `${muted} hover:bg-[#eaf0f8] dark:hover:bg-white/10`;

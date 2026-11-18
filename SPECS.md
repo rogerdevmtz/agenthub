@@ -24,7 +24,8 @@ La captura de Nexo aportada para el proyecto guía las proporciones, las superfi
 
 1. Mostrar tarjetas para ingresos totales del mes, pérdidas por descuentos y cupones, agentes activos y agentes fallando. Cada tarjeta lleva icono, etiqueta y valor de ejemplo.
 2. Dar a cada tarjeta un acento semántico, una superficie grafito con textura que se desvanece desde la esquina superior derecha y una línea decorativa con relleno sutil. Mantener alineados iconos, etiquetas y cifras.
-3. Debajo de las cuatro tarjetas, reservar un bloque de ancho completo para «Actividad semanal». Identificar el marcador como gráfico de ejemplo y mostrar una barra ilustrativa por día, una escala vertical y una sola guía discontinua para el promedio diario.
+3. Debajo de las cuatro tarjetas, usar el ancho disponible para la fila de análisis. «Actividad semanal» ocupa el panel principal a la izquierda. Identificar el marcador como gráfico de ejemplo y mostrar una barra ilustrativa por día, una escala vertical y una sola guía discontinua para el promedio diario.
+4. En la cabecera, mostrar un saludo, el mes de la demostración y un resplandor verde tenue en escritorio. A la derecha de la actividad, mostrar el desglose de ingresos por agente calculado con los importes pagados de las contrataciones iniciadas en el periodo. Mostrar el total en el centro del anillo, el importe y el porcentaje por agente al lado, y un enlace a Contrataciones. Apilar los paneles en pantallas estrechas.
 
 ### Usuarios
 
