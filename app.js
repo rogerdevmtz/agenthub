@@ -13,7 +13,6 @@ const icons = {
   sun: '<circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/>',
   chevron: '<path d="m6 9 6 6 6-6"/>',
   close: '<path d="m6 6 12 12M18 6 6 18"/>',
-  arrow: '<path d="M5 12h14m-6-6 6 6-6 6"/>',
 };
 
 const views = {
@@ -38,8 +37,6 @@ const view = document.querySelector('#view');
 const dialog = document.querySelector('#record-dialog');
 const dialogPanel = document.querySelector('#dialog-panel');
 const themeToggle = document.querySelector('#theme-toggle');
-const dashboardJumps = document.querySelector('#dashboard-jumps');
-const dashboardSummary = document.querySelector('#dashboard-summary');
 const announcement = document.querySelector('#announcement');
 const expandedAgents = new Set();
 let currentView;
@@ -108,12 +105,6 @@ function table(headers, rows, emptyText) {
 function dashboard() {
   const visible = visibleRecords(agents);
   const revenue = contracts.filter(item => item.start.startsWith('2026-11')).reduce((total, contract) => total + contractTotal(contract), 0);
-  const active = contracts.filter(contract => contract.status === 'Activo').length;
-  dashboardSummary.innerHTML = `<div class="border-l border-black/15 pl-4 dark:border-white/20 sm:pl-6">
-    <p class="text-[11px] font-medium uppercase tracking-wide ${muted}">Contratos activos</p>
-    <p class="text-[30px] font-semibold leading-none tracking-tight tabular-nums sm:text-[35px]">${active}</p>
-  </div>
-  <a href="#contrataciones" class="${primary} min-h-11 gap-2 !rounded-full px-5">Ver contratos ${icon('arrow', 'size-4')}</a>`;
   const metrics = [
     { name: 'Ingresos del mes', value: euros.format(revenue), detail: 'Noviembre de 2026', key: 'money', color: 'text-lime-800 dark:text-[#c7ff4f]' },
     { name: 'Descuentos y cupones', value: euros.format(-620), detail: 'Pérdida acumulada del mes', key: 'discount', color: 'text-amber-800 dark:text-amber-300' },
@@ -127,45 +118,39 @@ function dashboard() {
     'M3 19C17 26 20 1 30 13S38 29 48 25S61 40 73 30S87 35 95 23',
   ];
   return `<div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4" aria-label="Métricas principales">
-    ${metrics.map((metric, index) => `<article data-metric class="${dashboardPanel} relative isolate min-h-[124px] overflow-hidden px-4 py-3.5 sm:px-5">
-      <div data-metric-texture class="pointer-events-none absolute inset-0 -z-10 hidden bg-[radial-gradient(circle,#ffffff_0.7px,transparent_1px)] bg-[length:3px_3px] opacity-[0.19] [mask-image:radial-gradient(ellipse_at_100%_3%,black_5%,rgba(0,0,0,0.65)_34%,rgba(0,0,0,0.16)_72%,rgba(0,0,0,0.04)_100%)] dark:block" aria-hidden="true"></div>
-      <svg viewBox="0 0 98 40" class="pointer-events-none absolute bottom-5 right-2 -z-10 h-10 w-[27%] min-w-16 text-[#578600] dark:text-[#c7ff4f] dark:drop-shadow-[0_0_5px_#a3f52d]" aria-hidden="true">
-        <path d="${trends[index]}" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round"/>
+    ${metrics.map((metric, index) => `<article data-metric class="${dashboardPanel} relative isolate min-h-[126px] overflow-hidden px-4 py-3.5 sm:px-5">
+      <div data-metric-texture class="pointer-events-none absolute inset-0 -z-10 hidden bg-[radial-gradient(circle,#ffffff_0.7px,transparent_1px)] bg-[length:3px_3px] opacity-[0.19] [mask-image:radial-gradient(ellipse_80%_130%_at_100%_0%,black_0%,rgba(0,0,0,0.82)_25%,rgba(0,0,0,0.25)_63%,rgba(0,0,0,0.04)_87%,transparent_100%)] dark:block" aria-hidden="true"></div>
+      <svg viewBox="0 0 98 48" class="pointer-events-none absolute bottom-4 right-3 -z-10 h-12 w-[29%] min-w-16 text-[#578600] dark:text-[#c7ff4f]" aria-hidden="true">
+        <defs>
+          <linearGradient id="metric-fill-${index}" x2="0" y2="1">
+            <stop stop-color="currentColor" stop-opacity=".29"/>
+            <stop offset="1" stop-color="currentColor" stop-opacity="0"/>
+          </linearGradient>
+        </defs>
+        <path d="${trends[index]}V48H3Z" fill="url(#metric-fill-${index})"/>
+        <path d="${trends[index]}" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" class="dark:drop-shadow-[0_0_4px_#a3f52d]"/>
       </svg>
       <h2 class="flex items-center gap-2.5 text-sm font-medium"><span class="grid size-8 shrink-0 place-items-center rounded-lg bg-black/5 ${metric.color} dark:bg-white/[0.075]">${icon(metric.key)}</span>${metric.name}</h2>
       <p class="mt-2.5 text-[26px] font-semibold leading-tight tracking-tight tabular-nums">${metric.value}</p>
       <p class="mt-1 pr-[24%] text-xs ${muted}">${metric.detail}</p>
     </article>`).join('')}
   </div>
-  <section id="activity" tabindex="-1" aria-label="Actividad y estado de agentes" class="mt-5 grid scroll-mt-4 gap-4 outline-none lg:grid-cols-[minmax(0,1.45fr)_minmax(0,1fr)]">
-    ${weeklyActivity()}
-    ${agentStatus(visible)}
-  </section>
-  <section id="operations" tabindex="-1" aria-label="Operaciones recientes" class="mt-5 grid scroll-mt-4 gap-4 outline-none lg:grid-cols-[minmax(0,1.08fr)_minmax(0,1fr)_minmax(0,0.95fr)]">
-    ${dashboardOperations(visible)}
-  </section>`;
+  ${weeklyActivity()}`;
 }
 
 function weeklyActivity() {
   const activityPath = 'M1 177C25 177 38 175 62 163S92 133 123 131S157 139 183 114S216 82 245 96S286 121 318 96S354 70 381 79S426 96 451 71S484 49 511 53S541 69 569 48S610 21 640 33S674 49 704 28S737 24 759 17';
   const otherPath = 'M1 186C26 187 45 187 71 177S101 155 128 157S155 172 184 152S218 132 247 142S279 155 305 137S338 122 367 129S410 141 438 120S476 101 505 107S539 119 564 99S600 82 631 92S671 105 698 83S729 80 759 68';
-  return `<figure class="${dashboardPanel} min-w-0 px-4 pb-4 pt-4 sm:min-h-[332px] sm:px-5">
-    <figcaption class="flex flex-wrap items-center justify-between gap-2">
+  return `<figure id="activity" class="${dashboardPanel} mt-5 min-w-0 px-4 pb-4 pt-4 sm:px-5 sm:pb-5">
+    <figcaption class="mb-4 flex flex-wrap items-center justify-between gap-2">
       <h2 class="text-[22px] font-semibold tracking-tight">Actividad semanal</h2>
-      <span class="rounded-full border border-black/15 px-3 py-1.5 text-[11px] ${muted} dark:border-white/15">Vista de ejemplo</span>
+      <span class="rounded-full border border-black/15 px-3 py-1.5 text-[11px] ${muted} dark:border-white/15">Gráfico de ejemplo</span>
     </figcaption>
-    <div class="mb-3 mt-2 flex flex-wrap gap-4 text-xs">
-      <span class="flex items-center gap-1.5"><span class="size-2.5 rounded-full bg-[#78a917] dark:bg-[#c7ff4f]"></span>Ejecuciones</span>
-      <span class="flex items-center gap-1.5"><span class="size-2.5 rounded-full bg-slate-600 dark:bg-slate-100"></span>Tareas completadas</span>
-    </div>
-    <p class="sr-only">Marcador de posición ilustrado. Las líneas no representan registros reales.</p>
-    <div class="grid grid-cols-[auto_minmax(0,1fr)] gap-2" aria-hidden="true">
-      <div class="flex h-[184px] flex-col justify-between py-0.5 text-[10px] ${muted} sm:h-[193px]"><span>120</span><span>90</span><span>60</span><span>30</span><span>0</span></div>
-      <div class="min-w-0">
-        <svg viewBox="0 0 760 195" preserveAspectRatio="none" class="block h-[184px] w-full sm:h-[193px]">
+    <div class="rounded-xl border border-dashed border-black/15 bg-black/[0.015] p-3 dark:border-white/15 dark:bg-black/15 sm:p-4" aria-hidden="true">
+        <svg viewBox="0 0 760 195" preserveAspectRatio="none" class="block h-[164px] w-full sm:h-[230px]">
           <defs>
-            <pattern id="activity-grid" width="108.6" height="48.5" patternUnits="userSpaceOnUse">
-              <path d="M108.6 0H0V48.5" class="stroke-black/20 dark:stroke-white/25" stroke-dasharray="2 4" stroke-width="1" fill="none"/>
+            <pattern id="activity-grid" width="108.6" height="32.3" patternUnits="userSpaceOnUse">
+              <path d="M108.6 0H0V32.3" class="stroke-black/20 dark:stroke-white/25" stroke-dasharray="2 4" stroke-width="1" fill="none"/>
             </pattern>
             <linearGradient id="activity-fill" x1="0" y1="0" x2="0" y2="1">
               <stop class="text-[#88b333] dark:text-[#9de223]" stop-color="currentColor" stop-opacity=".48"/>
@@ -178,83 +163,9 @@ function weeklyActivity() {
           <path d="${otherPath}" fill="none" stroke="currentColor" stroke-width="1.7" vector-effect="non-scaling-stroke" class="text-slate-600 dark:text-slate-100"/>
           <path d="M0 194H760" class="stroke-black/25 dark:stroke-white/25" stroke-width="1"/>
         </svg>
-        <div class="mt-2 grid grid-cols-7 text-center text-[10px] ${muted}"><span>Lun</span><span>Mar</span><span>Mié</span><span>Jue</span><span>Vie</span><span>Sáb</span><span>Dom</span></div>
-      </div>
+        <div class="mt-2 grid grid-cols-7 text-center text-[11px] ${muted}"><span>Lun</span><span>Mar</span><span>Mié</span><span>Jue</span><span>Vie</span><span>Sáb</span><span>Dom</span></div>
     </div>
   </figure>`;
-}
-
-function agentStatus(visible) {
-  const statuses = [
-    { name: 'Activos', status: 'Activo', tone: 'text-[#77a91f] dark:text-[#c7ff4f]' },
-    { name: 'Inactivos', status: 'Inactivo', tone: 'text-[#7c8a79] dark:text-[#adba9f]' },
-    { name: 'Fallando', status: 'Fallando', tone: 'text-[#55762b] dark:text-[#6c993b]' },
-  ];
-  let position = 0;
-  const segments = statuses.map(item => {
-    const count = visible.filter(agent => agent.status === item.status).length;
-    const percent = visible.length ? 100 * count / visible.length : 0;
-    const start = position;
-    position += percent;
-    return { ...item, count, start, percent };
-  });
-  return `<article id="agent-status" tabindex="-1" class="${dashboardPanel} scroll-mt-4 px-4 pb-5 pt-4 outline-none sm:px-5">
-    <div class="flex flex-wrap items-center justify-between gap-2">
-      <h2 class="text-[22px] font-semibold tracking-tight">Estado de agentes</h2>
-      <a href="#agentes" class="${button} !min-h-8 !rounded-full !px-3 !text-xs">Ver agentes</a>
-    </div>
-    <div class="mt-5 flex flex-wrap items-center gap-4 sm:gap-5">
-      <div class="relative mx-auto size-[min(49vw,210px)] shrink-0 lg:mx-0 lg:size-[clamp(112px,14.6vw,212px)]">
-        <svg viewBox="0 0 200 200" class="size-full" aria-hidden="true">
-          <circle cx="100" cy="100" r="82" fill="none" stroke-width="26" class="stroke-black/10 dark:stroke-white/10"/>
-          ${segments.filter(item => item.count).map(item => `<circle cx="100" cy="100" r="82" pathLength="100" fill="none" stroke-width="26" stroke="currentColor" class="${item.tone}" transform="rotate(-90 100 100)" stroke-dasharray="${item.percent} ${100 - item.percent}" stroke-dashoffset="${-item.start}"/>`).join('')}
-        </svg>
-        <div class="absolute inset-0 grid place-content-center text-center"><span class="text-[32px] font-semibold leading-none tabular-nums">${visible.length}</span><span class="text-xs ${muted}">Total de agentes</span></div>
-      </div>
-      <ul class="min-w-[8rem] flex-1 space-y-3.5">
-        ${segments.map(item => `<li class="flex items-center justify-between gap-2 text-sm">
-          <span class="flex items-center gap-2"><span class="size-2.5 rounded-full bg-current ${item.tone}" aria-hidden="true"></span>${item.name}</span>
-          <span class="tabular-nums">${item.count} <span class="ml-1 text-xs ${muted}">(${Math.round(item.percent)} %)</span></span>
-        </li>`).join('')}
-      </ul>
-    </div>
-  </article>`;
-}
-
-function dashboardOperations(visible) {
-  const recentContracts = contracts.slice(0, 4).map(contract => [
-    nameOf(agents, contract.agent), nameOf(users, contract.user), euros.format(contractTotal(contract)),
-  ]);
-  const skillStats = visibleRecords(skills).map(skill => ({ ...skill, count: agentsUsing(skill).length }))
-    .sort((first, second) => second.count - first.count).slice(0, 4);
-  const skillRows = skillStats.map(skill => {
-    const percent = visible.length ? Math.round(100 * skill.count / visible.length) : 0;
-    return [skill.name, `${skill.count} de ${visible.length} agentes`, `${percent} %`, percent];
-  });
-  const incidentRows = errors.slice(0, 3).map(error => [
-    nameOf(agents, error.agent), error.type, error.resolved ? 'Resuelto' : 'Pendiente',
-  ]);
-  const cards = [
-    { title: 'Últimas contrataciones', section: 'contrataciones', rows: recentContracts },
-    { title: 'Skills más utilizadas', section: 'skills', rows: skillRows },
-    { title: 'Incidencias recientes', section: 'errores', rows: incidentRows },
-  ];
-  return cards.map(card => `<article class="${dashboardPanel} min-w-0 px-4 pb-3 pt-4 sm:px-5">
-    <div class="mb-1 flex flex-wrap items-center justify-between gap-2">
-      <h2 class="text-lg font-semibold tracking-tight">${card.title}</h2>
-      <a href="#${card.section}" aria-label="Ver todo en ${views[card.section].title}" class="${button} !min-h-7 gap-1 !rounded-full !px-2.5 !text-xs">Ver todo <span aria-hidden="true">›</span></a>
-    </div>
-    ${card.rows.length ? `<ul class="${divider}">${card.rows.map(([title, subtitle, value, percent]) => `<li class="flex items-center gap-2.5 py-3">
-      <span class="grid size-8 shrink-0 place-items-center rounded-full bg-lime-100 text-lime-900 dark:bg-[#c7ff4f]/10 dark:text-[#c7ff4f]">${icon(card.section, 'size-4')}</span>
-      <div class="min-w-0 flex-1">
-        <div class="flex items-center justify-between gap-2">
-          <div class="min-w-0"><span class="block text-sm font-medium">${title}</span><span class="block text-xs ${muted}">${subtitle}</span></div>
-          <span class="shrink-0 text-xs font-medium tabular-nums">${value}</span>
-        </div>
-        ${Number.isFinite(percent) ? `<svg viewBox="0 0 100 6" preserveAspectRatio="none" class="mt-1.5 block h-1.5 w-full overflow-hidden rounded-full bg-black/10 text-[#76a725] dark:bg-white/15 dark:text-[#c7ff4f]" aria-hidden="true"><rect width="${percent}" height="6" rx=".7" fill="currentColor"/></svg>` : ''}
-      </div>
-    </li>`).join('')}</ul>` : `<p class="py-3 text-sm ${muted}">No hay registros disponibles.</p>`}
-  </article>`).join('');
 }
 
 function userList() {
@@ -344,8 +255,6 @@ function render() {
   document.title = `AgentHub | ${views[currentView].title}`;
   document.querySelector('#heading').textContent = views[currentView].title;
   document.querySelector('#description').textContent = views[currentView].description;
-  dashboardJumps.classList.toggle('lg:flex', currentView === 'dashboard');
-  if (currentView !== 'dashboard') dashboardSummary.replaceChildren();
   nav.innerHTML = Object.entries(views).map(([name, data]) => {
     const active = name === currentView;
     const tone = active ? 'bg-[#c7ff4f] text-[#1a220b]' : `${muted} hover:bg-black/5 dark:hover:bg-white/10`;
@@ -356,28 +265,6 @@ function render() {
   openMenu = undefined;
   view.innerHTML = renderers[currentView]();
 }
-
-function selectDashboardJump(target) {
-  dashboardJumps.querySelectorAll('[data-jump]').forEach(control => {
-    const selected = control.dataset.jump === target;
-    control.setAttribute('aria-pressed', String(selected));
-    control.classList.toggle('bg-[#c7ff4f]', selected);
-    control.classList.toggle('text-[#182008]', selected);
-    control.classList.toggle('font-semibold', selected);
-    control.classList.toggle('font-medium', !selected);
-    control.classList.toggle('hover:bg-black/5', !selected);
-    control.classList.toggle('dark:hover:bg-white/10', !selected);
-  });
-}
-
-dashboardJumps.addEventListener('click', event => {
-  const control = event.target.closest('[data-jump]');
-  if (!control) return;
-  const target = document.getElementById(control.dataset.jump);
-  selectDashboardJump(control.dataset.jump);
-  target.focus({ preventScroll: true });
-  target.scrollIntoView({ block: 'start' });
-});
 
 function closeMenu(restoreFocus = false) {
   if (!openMenu) return;
@@ -528,7 +415,6 @@ document.querySelector('#skip-link').addEventListener('click', event => {
 
 window.addEventListener('hashchange', () => {
   if (dialog.open) dialog.close();
-  selectDashboardJump('overview');
   render();
 });
 

@@ -23,29 +23,28 @@
   </aside>
 
   <div class="pb-24 sm:ml-[94px] sm:pb-8">
-    <header class="relative mx-auto flex min-h-[78px] max-w-[1620px] items-center justify-between gap-4 px-4 sm:min-h-[92px] sm:px-6">
-      <a href="#dashboard" aria-label="AgentHub, inicio" class="flex shrink-0 items-center gap-2.5 rounded-lg text-[23px] font-semibold tracking-tight focus-visible:outline focus-visible:outline-2 focus-visible:outline-lime-600">
-        <svg viewBox="0 0 34 34" class="size-8 text-[#457500] dark:text-[#c7ff4f]" fill="currentColor" aria-hidden="true">
-          <path d="M17 3 3 27h7l7-12 7 12h7L17 3Z"/><path d="M14 23h6l3 5H11l3-5Z" opacity=".65"/>
-        </svg>
-        AgentHub
+    <header class="mx-auto flex min-h-[78px] max-w-[1620px] items-center justify-between gap-4 px-4 sm:min-h-[92px] sm:px-6">
+      <svg class="absolute size-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <!-- La diferencia entre azul y rojo permite teñir el acento y conservar los tonos neutros. -->
+          <filter id="brand-dark" color-interpolation-filters="sRGB">
+            <feColorMatrix type="matrix" values=".216 0 .784 0 0   -.004 0 1.004 0 0   .69 0 .31 0 0   0 0 0 1 0"/>
+          </filter>
+          <filter id="brand-light" color-interpolation-filters="sRGB">
+            <feColorMatrix type="matrix" values="-.318 0 .4 0 0   -.48 0 .57 0 0   .038 0 .06 0 0   0 0 0 1 0"/>
+          </filter>
+        </defs>
+      </svg>
+      <a href="#dashboard" aria-label="Roger Martínez · Inicio de AgentHub" class="-ml-2 shrink-0 rounded-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-lime-600">
+        <img src="assets/roger-martinez.webp" alt="Roger Martínez" width="272" height="91" class="h-auto w-40 [filter:url(#brand-light)] sm:w-48 dark:[filter:url(#brand-dark)]">
       </a>
-      <div id="dashboard-jumps" class="absolute left-1/2 hidden w-[min(43vw,620px)] -translate-x-1/2 items-center gap-1 rounded-full border border-black/15 bg-white/70 p-1 text-sm shadow-sm dark:border-white/20 dark:bg-white/[0.045] lg:flex" role="group" aria-label="Ir a un panel del Dashboard">
-        <button type="button" data-jump="overview" aria-pressed="true" class="min-h-11 flex-1 rounded-full bg-[#c7ff4f] px-2 font-semibold text-[#182008] focus-visible:outline focus-visible:outline-2 focus-visible:outline-lime-700">Resumen</button>
-        <button type="button" data-jump="activity" aria-pressed="false" class="min-h-11 flex-1 rounded-full px-2 font-medium hover:bg-black/5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-lime-700 dark:hover:bg-white/10">Actividad</button>
-        <button type="button" data-jump="agent-status" aria-pressed="false" class="min-h-11 flex-1 rounded-full px-2 font-medium hover:bg-black/5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-lime-700 dark:hover:bg-white/10">Estado</button>
-        <button type="button" data-jump="operations" aria-pressed="false" class="min-h-11 flex-1 rounded-full px-2 font-medium hover:bg-black/5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-lime-700 dark:hover:bg-white/10">Operaciones</button>
-      </div>
       <button id="theme-toggle" title="Cambiar tema" type="button" aria-pressed="true" aria-label="Modo oscuro" class="grid size-12 shrink-0 place-items-center rounded-full border border-black/10 bg-white hover:border-lime-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-lime-600 dark:border-white/10 dark:bg-[#1b1d20] dark:hover:border-lime-300 dark:focus-visible:outline-lime-300"></button>
     </header>
 
     <main id="contenido" tabindex="-1" class="mx-auto max-w-[1620px] px-4 pt-4 outline-none sm:px-6 sm:pt-3">
-      <div id="overview" tabindex="-1" class="mb-7 flex scroll-mt-4 flex-wrap items-center justify-between gap-4 outline-none sm:mb-[26px]">
-        <div>
-          <h1 id="heading" class="text-[30px] font-semibold leading-tight tracking-[-0.04em] sm:text-[34px]">Dashboard</h1>
-          <p id="description" class="mt-1 text-sm text-[#576052] dark:text-[#b5b8bf] sm:text-base"></p>
-        </div>
-        <div id="dashboard-summary" class="flex flex-wrap items-center gap-4 sm:gap-5 lg:gap-7"></div>
+      <div class="mb-7 sm:mb-[26px]">
+        <h1 id="heading" class="text-[30px] font-semibold leading-tight tracking-[-0.04em] sm:text-[34px]">Dashboard</h1>
+        <p id="description" class="mt-1 text-sm text-[#576052] dark:text-[#b5b8bf] sm:text-base"></p>
       </div>
       <p id="announcement" class="sr-only" role="status"></p>
       <section id="view" aria-labelledby="heading"></section>
