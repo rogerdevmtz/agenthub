@@ -4,8 +4,13 @@ Prototipo del panel de administración de una plataforma de alquiler de agentes 
 
 ## Capturas del Dashboard
 
-- [Modo oscuro (1920 × 1080)](docs/screenshots/agenthub-black.png).
-- [Modo claro (1920 × 1080)](docs/screenshots/agenthub-light.png).
+### Modo oscuro
+
+![Dashboard de AgentHub en modo oscuro](docs/screenshots/agenthub-black.png)
+
+### Modo claro
+
+![Dashboard de AgentHub en modo claro](docs/screenshots/agenthub-light.png)
 
 ## Abrir en local
 
