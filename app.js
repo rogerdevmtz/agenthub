@@ -128,7 +128,7 @@ function dashboard() {
   ];
   return `<div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4" aria-label="Métricas principales">
     ${metrics.map((metric, index) => `<article data-metric class="${dashboardPanel} relative isolate min-h-[124px] overflow-hidden px-4 py-3.5 sm:px-5">
-      <div class="pointer-events-none absolute right-0 top-0 -z-10 hidden h-24 w-32 bg-[radial-gradient(circle,#ffffff_0.7px,transparent_1px)] bg-[length:3px_3px] opacity-[0.18] [mask-image:linear-gradient(225deg,black,transparent_76%)] dark:block" aria-hidden="true"></div>
+      <div data-metric-texture class="pointer-events-none absolute inset-0 -z-10 hidden bg-[radial-gradient(circle,#ffffff_0.7px,transparent_1px)] bg-[length:3px_3px] opacity-[0.19] [mask-image:radial-gradient(ellipse_at_100%_3%,black_5%,rgba(0,0,0,0.65)_34%,rgba(0,0,0,0.16)_72%,rgba(0,0,0,0.04)_100%)] dark:block" aria-hidden="true"></div>
       <svg viewBox="0 0 98 40" class="pointer-events-none absolute bottom-5 right-2 -z-10 h-10 w-[27%] min-w-16 text-[#578600] dark:text-[#c7ff4f] dark:drop-shadow-[0_0_5px_#a3f52d]" aria-hidden="true">
         <path d="${trends[index]}" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round"/>
       </svg>
